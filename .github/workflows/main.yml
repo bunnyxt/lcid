@@ -35,3 +35,12 @@ jobs:
       # Runs fetch_problems_all.py
       - name: Run fetch_problems_all.py
         run: python fetch_problems_all.py
+      
+      # Commit problems_all.json
+      - name: Commit problems_all.json
+        uses: stefanzweifel/git-auto-commit-action@v4.12.0
+        with:
+          # Commit message
+          commit_message: 'ci: update problems_all.json'
+          # File pattern used for `git add`. For example `src/\*.js`
+          file_pattern: problems_all.json
