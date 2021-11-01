@@ -30,3 +30,6 @@ def info(problem_id):
     if not problem_info:
         return '{"code":404,"message":"Fail to get info of leetcode problem %s."}' % problem_id, 404
     return json.dumps(problems_all[problem_id])
+
+
+app.run()
