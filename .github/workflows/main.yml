@@ -28,6 +28,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
       
+      # Pip install
+      - name: Python Pip Install
+        uses: logikal-code/pip-install@v1.0.0
+      
       # Runs fetch_problems_all.py
       - name: Run fetch_problems_all.py
         run: python fetch_problems_all.py
