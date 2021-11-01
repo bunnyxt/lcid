@@ -26,6 +26,14 @@ def go_redirect(problem_id):
     return redirect('https://leetcode.com/problems/%s/' % problem_info['titleSlug'])
 
 
+@app.route('/cn/<problem_id>')
+def go_redirect_cn(problem_id):
+    problem_info = problems_all.get(problem_id, None)
+    if not problem_info:
+        return 'Fail to redirect to leetcode-cn problem %s page.' % problem_id
+    return redirect('https://leetcode-cn.com/problems/%s/' % problem_info['titleSlug'])
+
+
 @app.route('/info/<problem_id>')
 def info(problem_id):
     problem_info = problems_all.get(problem_id, None)
