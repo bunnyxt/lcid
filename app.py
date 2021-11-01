@@ -1,5 +1,7 @@
+import sys
 from flask import Flask, redirect
 from flask_cors import CORS
+from waitress import serve
 import json
 
 app = Flask(__name__, static_url_path='', static_folder='')
@@ -32,4 +34,5 @@ def info(problem_id):
     return json.dumps(problems_all[problem_id])
 
 
-app.run()
+if __name__ == "__main__":
+    serve(app, host="0.0.0.0", port=sys.argv[1])

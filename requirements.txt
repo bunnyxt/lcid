@@ -1,3 +1,4 @@
 urllib3~=1.25.3
 Flask~=2.0.2
 flask-cors~=3.0.10
+waitress~=2.0.0
