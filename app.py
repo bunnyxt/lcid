@@ -18,6 +18,11 @@ def root():
     return app.send_static_file('index.html')
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file('favicon.ico')
+
+
 @app.route('/<problem_id>')
 def go_redirect(problem_id):
     problem_info = problems_all.get(problem_id, None)
