@@ -15,6 +15,8 @@ LCid is now available at [lcid.cc](https://lcid.cc). Just add `/<problem-id>` at
 
 What's more, to redirect to China site, add `/cn/<problem-id>` instead (e.g. [lcid.cc/cn/1](https://lcid.cc/cn/1)). Interested in the brief info of the problem? Try `/info/<problem-id>` (e.g. [lcid.cc/info/1](https://lcid.cc/info/1)) and find more!
 
+More technical details introduced at [this blog](https://www.bunnyxt.com/blogs/lcid-cc-leetcode-problems-redirect-via-id/) (Chinese only).
+
 ## Environment
 
 To start LCid on your local machine, you should have `python 3.7+` installed.
