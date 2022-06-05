@@ -1,6 +1,7 @@
 import urllib3
 import json
 import re
+import time
 
 
 def get_csrftoken():
@@ -67,15 +68,22 @@ def fetch_problems(csrftoken, limit=50):
         },
     }
     encoded_data = json.dumps(data).encode('utf-8')
-    r = http.request(
-        'POST',
-        'https://leetcode.com/graphql/',
-        body=encoded_data,
-        headers={
-            'Content-Type': 'application/json',
-            'cookie': cookie,
-        },
-    )
+    retry_count = 3
+    for trial in range(1, retry_count + 1):
+        r = http.request(
+            'POST',
+            'https://leetcode.com/graphql/',
+            body=encoded_data,
+            headers={
+                'Content-Type': 'application/json',
+                'cookie': cookie,
+            },
+        )
+        if r.status == 200:
+            break
+        if trial < retry_count:
+            print('Status %d got when fetch problems, will retry %d second(s) later...' % (r.status, trial ** 2))
+            time.sleep(trial ** 2)
     if r.status != 200:
         raise RuntimeError('Fail to fetch problems! status: %d, data: %s' % (r.status, r.data))
     response_content = json.loads(r.data)
