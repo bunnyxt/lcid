@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from 'antd';
 import './App.css';
-import RedirectLink from './RedirectLink';
+import RedirectLink from './components/RedirectLink';
 
 const App = () => {
   const [problemId, setProblemId] = useState(146);
