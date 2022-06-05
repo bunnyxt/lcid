@@ -13,6 +13,13 @@ const RedirectCard = () => {
     setProblemId('' + Math.ceil(Math.random() * MAX_RANDOM_PROBLEM_ID));
   };
 
+  const handleProblemIdChange = (e) => {
+    const newValue = e.target.value;
+    if (newValue.match(/^[0-9]*$/)) {
+      setProblemId(newValue);
+    }
+  };
+
   useEffect(() => {
     // initialize problem id
     setRandomProblemId();
@@ -39,7 +46,7 @@ const RedirectCard = () => {
           </div>
         }
         value={problemId}
-        onChange={(e) => setProblemId(e.target.value)}
+        onChange={handleProblemIdChange}
         ref={redirectIdInputRef}
       />
       <div className="redirect-link-grid">
