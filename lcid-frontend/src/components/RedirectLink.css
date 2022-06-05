@@ -1,0 +1,8 @@
+.redirect-link-suffix span {
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.redirect-link-suffix span:hover {
+  color: #1890ff;
+}

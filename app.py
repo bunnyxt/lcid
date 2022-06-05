@@ -4,7 +4,7 @@ from flask_cors import CORS
 from waitress import serve
 import json
 
-app = Flask(__name__, static_url_path='', static_folder='')
+app = Flask(__name__, static_url_path='', static_folder='lcid-frontend/build')
 CORS(app)
 
 # load problems
@@ -16,11 +16,6 @@ with open('problems_all.json', 'r') as f:
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return app.send_static_file('favicon.ico')
 
 
 @app.route('/<problem_id>')
@@ -37,6 +32,11 @@ def go_redirect_cn(problem_id):
     if not problem_info:
         return 'Fail to redirect to leetcode-cn problem %s page.' % problem_id
     return redirect('https://leetcode-cn.com/problems/%s/' % problem_info['titleSlug'])
+
+
+@app.route('/info')
+def info_all():
+    return json.dumps(problems_all)
 
 
 @app.route('/info/<problem_id>')

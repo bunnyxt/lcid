@@ -1,0 +1,22 @@
+@import '~antd/dist/antd.css';
+
+code {
+  background-color: #f0f0f0;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.App {
+  padding: 4rem;
+}
+
+.redirect-wrapper {
+  min-height: 80vh;
+  display: flex;
+}
+
+@media screen and (max-width: 767px) {
+  .App {
+    padding: 2rem;
+  }
+}

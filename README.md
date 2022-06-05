@@ -6,7 +6,7 @@ As a world's leading online programming learning platform, [LeetCode](https://le
 
 This simple project, called LCid, provides directly access to LeetCode problems via id. Features: 
 
-- Fetch all LeetCode problems via crwaler.
+- Fetch all LeetCode problems via crawler.
 - Redirect to LeetCode problem page with problem id in the URL path via backend.
 - Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode-cn.com/problemset/all/) redirect.
 - CI/CD, fetch all LeetCode problems daily and commit back to repository via GitHub Actions, then trigger backend rebuild and redeploy with the latest problems via Heroku.
@@ -25,6 +25,12 @@ The crawler is implemented with `urllib3` and backend is powered with `flask`.
 
 To install all those dependencies, execute `pip install -r requirements`.
 
+The frontend is built with `React.js` with `Ant Design` UI.
+
+To build frontend, you should have `Node.js 16.13.2+` with `npm 8.1.2+` installed.
+
+(older versions may work but not tested)
+
 ## Usage
 
 ### Fetch All Problems
@@ -41,6 +47,12 @@ All 2060 problems info saved into problems_all.json file.
 ```
 
 After few seconds, all problems info have been saved into `problems_all.json` file in json format.
+
+### Build Frontend
+
+To start frontend, install all dependencies via `cd lcid-frontend && npm install` first. Then, start frontend development server via `npm run start`. By default, the development server will starts at `http://localhost:3000`.
+
+To build frontend, use `npm run build`. The built frontend will be created at `lcid-frontend/build`.
 
 ### Start Backend Service
 
