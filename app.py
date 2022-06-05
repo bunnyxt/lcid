@@ -4,7 +4,7 @@ from flask_cors import CORS
 from waitress import serve
 import json
 
-app = Flask(__name__, static_url_path='', static_folder='lcid-frontend/build')
+app = Flask(__name__, static_url_path='', static_folder='build')
 CORS(app)
 
 # load problems

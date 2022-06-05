@@ -3,5 +3,5 @@
 __pycache__/
 .DS_Store
 
-lcid-frontend/node_modules
-lcid-frontend/build
+node_modules/
+build/

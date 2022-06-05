@@ -50,9 +50,9 @@ After few seconds, all problems info have been saved into `problems_all.json` fi
 
 ### Build Frontend
 
-To start frontend, install all dependencies via `cd lcid-frontend && npm install` first. Then, start frontend development server via `npm run start`. By default, the development server will starts at `http://localhost:3000`.
+To start frontend, install all dependencies via `npm install` first. Then, start frontend development server via `npm run start`. By default, the development server will starts at `http://localhost:3000`.
 
-To build frontend, use `npm run build`. The built frontend will be created at `lcid-frontend/build`.
+To build frontend, use `npm run build`. The built frontend will be created at `build/`.
 
 ### Start Backend Service
 
