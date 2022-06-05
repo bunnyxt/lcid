@@ -39,6 +39,11 @@ def go_redirect_cn(problem_id):
     return redirect('https://leetcode-cn.com/problems/%s/' % problem_info['titleSlug'])
 
 
+@app.route('/info')
+def info_all():
+    return json.dumps(problems_all)
+
+
 @app.route('/info/<problem_id>')
 def info(problem_id):
     problem_info = problems_all.get(problem_id, None)
