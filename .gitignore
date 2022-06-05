@@ -1,2 +1,5 @@
 .idea/
 __pycache__/
+.DS_Store
+
+lcid-frontend/node_modules
