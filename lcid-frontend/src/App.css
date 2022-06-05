@@ -6,18 +6,6 @@ code {
   border-radius: 4px;
 }
 
-.color-l {
-  color: rgb(0, 0, 0);
-}
-
-.color-c {
-  color: rgb(255, 161, 22);
-}
-
-.color-id {
-  color: rgb(179, 179, 179);
-}
-
 .App {
   padding: 4rem;
 }
@@ -27,53 +15,8 @@ code {
   display: flex;
 }
 
-.redirect-card {
-  max-width: 640px;
-  margin: auto;
-  padding: 4rem;
-  border-radius: 1rem;
-  text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.redirect-id-input {
-  padding: 2rem 6rem;
-}
-
-.redirect-link-grid {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-}
-
-.redirect-link-label {
-  text-align: start;
-  line-height: 32px;
-}
-
-.redirect-footer {
-  padding-top: 2rem;
-}
-
 @media screen and (max-width: 767px) {
   .App {
     padding: 2rem;
-  }
-
-  .redirect-card {
-    padding: 2rem;
-  }
-
-  .redirect-id-input {
-    padding: 2rem 0 1rem;
-  }
-
-  .redirect-link-grid {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .redirect-link-label {
-    padding-top: 1rem;
   }
 }
