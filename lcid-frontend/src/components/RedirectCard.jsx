@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input } from 'antd';
+import { Input, Tooltip } from 'antd';
+import { RedoOutlined } from '@ant-design/icons';
 import './RedirectCard.css';
 import RedirectLink from './RedirectLink';
 
 const RedirectCard = () => {
-  const [problemId, setProblemId] = useState(146);
+  const [problemId, setProblemId] = useState('146');
   const redirectIdInputRef = useRef(null);
+
+  const MAX_RANDOM_PROBLEM_ID = 300;
+  const setRandomProblemId = () => {
+    setProblemId('' + Math.ceil(Math.random() * MAX_RANDOM_PROBLEM_ID));
+  };
 
   useEffect(() => {
     // initialize problem id
-    setProblemId(Math.ceil(Math.random() * 300));
+    setRandomProblemId();
     // set id inpurt focus
     redirectIdInputRef.current.focus({ cursor: 'end' });
   }, []);
@@ -25,6 +31,13 @@ const RedirectCard = () => {
       <Input
         className="redirect-id-input"
         addonBefore="LeetCode problem id"
+        suffix={
+          <div className="redirect-id-input-suffix">
+            <Tooltip placement="top" title="refresh">
+              <RedoOutlined onClick={() => setRandomProblemId()} />
+            </Tooltip>
+          </div>
+        }
         value={problemId}
         onChange={(e) => setProblemId(e.target.value)}
         ref={redirectIdInputRef}

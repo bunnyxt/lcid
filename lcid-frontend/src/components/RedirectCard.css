@@ -23,6 +23,15 @@
   padding: 2rem 6rem;
 }
 
+.redirect-id-input-suffix span {
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.redirect-id-input-suffix span:hover {
+  color: #1890ff;
+}
+
 .redirect-link-grid {
   display: grid;
   grid-template-columns: auto 1fr;
