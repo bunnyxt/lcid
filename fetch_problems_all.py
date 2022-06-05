@@ -23,7 +23,42 @@ def fetch_problems(csrftoken, limit=50):
     http = urllib3.PoolManager()
     cookie = 'csrftoken=%s' % csrftoken
     data = {
-        'query': 'query problemsetQuestionList($categorySlug:String,$limit:Int,$skip:Int,$filters:QuestionListFilterInput){problemsetQuestionList:questionList(categorySlug:$categorySlug limit:$limit skip:$skip filters:$filters){total:totalNum questions:data{acRate difficulty freqBar frontendQuestionId:questionFrontendId isFavor paidOnly:isPaidOnly status title titleSlug topicTags{name id slug}hasSolution hasVideoSolution}}}',
+        'query': '''
+            query problemsetQuestionList(
+                $categorySlug:String,
+                $limit:Int,
+                $skip:Int,
+                $filters:QuestionListFilterInput
+            ) {
+                problemsetQuestionList:questionList(
+                    categorySlug:$categorySlug 
+                    limit:$limit 
+                    skip:$skip 
+                    filters:$filters
+                ) {
+                    total:totalNum 
+                    questions:data {
+                        acRate 
+                        difficulty 
+                        likes
+                        dislikes
+                        stats
+                        categoryTitle
+                        frontendQuestionId:questionFrontendId 
+                        paidOnly:isPaidOnly 
+                        title 
+                        titleSlug 
+                        topicTags {
+                            name 
+                            id 
+                            slug
+                        }
+                        hasSolution 
+                        hasVideoSolution
+                    }
+                }
+            }
+        ''',
         'variables': {
             'categorySlug': '',
             'skip': 0,
@@ -61,6 +96,18 @@ def main():
     response_content = fetch_problems(csrftoken, total_count)
     questions_all = {q['frontendQuestionId']: q for q in
                      response_content['data']['problemsetQuestionList']['questions']}
+    for question_id in questions_all.keys():
+        question_stats_json = questions_all[question_id]['stats']
+        totalAcceptedRaw = totalSubmissionRaw = None
+        try:
+            question_stats_dict = json.loads(question_stats_json)
+            totalAcceptedRaw = question_stats_dict['totalAcceptedRaw']
+            totalSubmissionRaw = question_stats_dict['totalSubmissionRaw']
+        except:
+            pass
+        questions_all[question_id]['totalAcceptedRaw'] = totalAcceptedRaw
+        questions_all[question_id]['totalSubmissionRaw'] = totalSubmissionRaw
+        del questions_all[question_id]['stats']
     print('All %d problems fetched.' % total_count)
 
     with open('problems_all.json', 'w') as f:
