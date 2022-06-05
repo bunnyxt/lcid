@@ -1,6 +1,7 @@
 import urllib3
 import json
 import re
+import time
 
 
 def get_csrftoken():
@@ -23,7 +24,42 @@ def fetch_problems(csrftoken, limit=50):
     http = urllib3.PoolManager()
     cookie = 'csrftoken=%s' % csrftoken
     data = {
-        'query': 'query problemsetQuestionList($categorySlug:String,$limit:Int,$skip:Int,$filters:QuestionListFilterInput){problemsetQuestionList:questionList(categorySlug:$categorySlug limit:$limit skip:$skip filters:$filters){total:totalNum questions:data{acRate difficulty freqBar frontendQuestionId:questionFrontendId isFavor paidOnly:isPaidOnly status title titleSlug topicTags{name id slug}hasSolution hasVideoSolution}}}',
+        'query': '''
+            query problemsetQuestionList(
+                $categorySlug:String,
+                $limit:Int,
+                $skip:Int,
+                $filters:QuestionListFilterInput
+            ) {
+                problemsetQuestionList:questionList(
+                    categorySlug:$categorySlug 
+                    limit:$limit 
+                    skip:$skip 
+                    filters:$filters
+                ) {
+                    total:totalNum 
+                    questions:data {
+                        acRate 
+                        difficulty 
+                        likes
+                        dislikes
+                        stats
+                        categoryTitle
+                        frontendQuestionId:questionFrontendId 
+                        paidOnly:isPaidOnly 
+                        title 
+                        titleSlug 
+                        topicTags {
+                            name 
+                            id 
+                            slug
+                        }
+                        hasSolution 
+                        hasVideoSolution
+                    }
+                }
+            }
+        ''',
         'variables': {
             'categorySlug': '',
             'skip': 0,
@@ -32,15 +68,22 @@ def fetch_problems(csrftoken, limit=50):
         },
     }
     encoded_data = json.dumps(data).encode('utf-8')
-    r = http.request(
-        'POST',
-        'https://leetcode.com/graphql/',
-        body=encoded_data,
-        headers={
-            'Content-Type': 'application/json',
-            'cookie': cookie,
-        },
-    )
+    retry_count = 3
+    for trial in range(1, retry_count + 1):
+        r = http.request(
+            'POST',
+            'https://leetcode.com/graphql/',
+            body=encoded_data,
+            headers={
+                'Content-Type': 'application/json',
+                'cookie': cookie,
+            },
+        )
+        if r.status == 200:
+            break
+        if trial < retry_count:
+            print('Status %d got when fetch problems, will retry %d second(s) later...' % (r.status, trial ** 2))
+            time.sleep(trial ** 2)
     if r.status != 200:
         raise RuntimeError('Fail to fetch problems! status: %d, data: %s' % (r.status, r.data))
     response_content = json.loads(r.data)
@@ -61,6 +104,18 @@ def main():
     response_content = fetch_problems(csrftoken, total_count)
     questions_all = {q['frontendQuestionId']: q for q in
                      response_content['data']['problemsetQuestionList']['questions']}
+    for question_id in questions_all.keys():
+        question_stats_json = questions_all[question_id]['stats']
+        totalAcceptedRaw = totalSubmissionRaw = None
+        try:
+            question_stats_dict = json.loads(question_stats_json)
+            totalAcceptedRaw = question_stats_dict['totalAcceptedRaw']
+            totalSubmissionRaw = question_stats_dict['totalSubmissionRaw']
+        except:
+            pass
+        questions_all[question_id]['totalAcceptedRaw'] = totalAcceptedRaw
+        questions_all[question_id]['totalSubmissionRaw'] = totalSubmissionRaw
+        del questions_all[question_id]['stats']
     print('All %d problems fetched.' % total_count)
 
     with open('problems_all.json', 'w') as f:
