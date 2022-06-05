@@ -6,7 +6,7 @@ As a world's leading online programming learning platform, [LeetCode](https://le
 
 This simple project, called LCid, provides directly access to LeetCode problems via id. Features: 
 
-- Fetch all LeetCode problems via crwaler.
+- Fetch all LeetCode problems via crawler.
 - Redirect to LeetCode problem page with problem id in the URL path via backend.
 - Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode-cn.com/problemset/all/) redirect.
 - CI/CD, fetch all LeetCode problems daily and commit back to repository via GitHub Actions, then trigger backend rebuild and redeploy with the latest problems via Heroku.
