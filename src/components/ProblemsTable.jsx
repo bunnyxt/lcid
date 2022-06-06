@@ -13,7 +13,7 @@ const ProblemsTable = () => {
 
   useEffect(() => {
     setLoadingProblems(true);
-    axios.get('http://localhost:1437/info')
+    axios.get('/info')  // TODO: support switch between development and production env
       .then((response) => {
         const newProblems = Object.entries(response.data)
           .map(([_, value]) => value)
