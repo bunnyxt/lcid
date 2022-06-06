@@ -48,9 +48,30 @@ const ProblemsTable = () => {
       })
   }, []);
 
+  const compareStringArray = (arr1, arr2) => {
+    if (typeof(arr1) !== 'string' || typeof(arr2) !== 'string') {
+      return false;
+    }
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    const arr1_sorted = [...arr1].sort();
+    const arr2_sorted = [...arr2].sort();
+    for (let i = 0; i < arr1_sorted.length; i++) {
+      if (arr1_sorted[i] !== arr2_sorted[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   const handleChange = (_, filters) => {
-    setFilteredDifficulty(filters.difficulty);
-    setFilteredTopics(filters.topicTags);
+    if (!compareStringArray(filters.difficulty, filtededDifficulty)) {
+      setFilteredDifficulty(filters.difficulty === null ? [] : filters.difficulty);
+    }
+    if (!compareStringArray(filters.topicTags, filteredTopics)) {
+      setFilteredTopics(filters.topicTags === null ? [] : filters.topicTags);
+    }
   };
 
   return (
