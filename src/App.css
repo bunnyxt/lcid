@@ -15,6 +15,12 @@ code {
   display: flex;
 }
 
+.problems-table-wrapper {
+  padding: 4rem 0 4rem;
+  margin: 0 auto;
+  max-width: 1600px;
+}
+
 @media screen and (max-width: 767px) {
   .App {
     padding: 2rem;
