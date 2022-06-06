@@ -1,0 +1,28 @@
+.difficulty-easy {
+  color: #00af9b;
+}
+
+.difficulty-medium {
+  color: #ffb800;
+}
+
+.difficulty-hard {
+  color: #ff2d55;
+}
+
+.title-header {
+  display: flex;
+}
+
+.title-header-content {
+  flex-grow: 1;
+}
+
+.topics-container {
+  margin-bottom: -4px;
+}
+
+.topic-tag {
+  margin-bottom: 4px;
+  cursor: pointer;
+}
