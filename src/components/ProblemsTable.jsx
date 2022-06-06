@@ -9,7 +9,7 @@ const ProblemsTable = () => {
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [filtededDifficulty, setFilteredDifficulty] = useState([]);
-  const [redirectSite, setRedirectSite] = useState('global');
+  const [redirectSite, setRedirectSite] = useState('com');
 
   useEffect(() => {
     setLoadingProblems(true);
