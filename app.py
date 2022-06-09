@@ -38,6 +38,11 @@ def static_favicon():
     return app.send_static_file('favicon.ico')
 
 
+@app.route('/robots.txt')
+def static_robots():
+    return app.send_static_file('robots.txt')
+
+
 @app.route('/<problem_id>')
 def go_redirect(problem_id):
     problem_info = problems_all.get(problem_id, None)
