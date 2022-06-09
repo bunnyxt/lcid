@@ -18,6 +18,26 @@ def root():
     return app.send_static_file('index.html')
 
 
+@app.route('/manifest.json')
+def static_manifest():
+    return app.send_static_file('manifest.json')
+
+
+@app.route('/lcid_logo_192.png')
+def static_logo_192():
+    return app.send_static_file('lcid_logo_192.png')
+
+
+@app.route('/lcid_logo_512.png')
+def static_logo_512():
+    return app.send_static_file('lcid_logo_512.png')
+
+
+@app.route('/favicon.ico')
+def static_favicon():
+    return app.send_static_file('favicon.ico')
+
+
 @app.route('/<problem_id>')
 def go_redirect(problem_id):
     problem_info = problems_all.get(problem_id, None)
