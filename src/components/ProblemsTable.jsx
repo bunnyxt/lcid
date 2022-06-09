@@ -132,9 +132,11 @@ const ProblemsTable = () => {
               <Tooltip 
                 placement="top" 
                 title={
-                  <div>
-                    {`likes: ${likes.toLocaleString()}`}<br />
-                    {`dislikes: ${dislikes.toLocaleString()}`}
+                  <div className="popularity-tooltip">
+                    <div>likes:</div>
+                    <div className="tooltip-value">{likes.toLocaleString()}</div>
+                    <div>dislikes:</div>
+                    <div className="tooltip-value">{dislikes.toLocaleString()}</div>
                   </div>
                 }
               >
@@ -154,9 +156,11 @@ const ProblemsTable = () => {
               <Tooltip 
                 placement="top" 
                 title={
-                  <div>
-                    {`accepted: ${totalSubmissionRaw.toLocaleString()}`}<br />
-                    {`submitted: ${totalAcceptedRaw.toLocaleString()}`}
+                  <div className="ac-rate-tooltip">
+                    <div>accepted:</div>
+                    <div className="tooltip-value">{totalSubmissionRaw.toLocaleString()}</div>
+                    <div>submitted:</div>
+                    <div className="tooltip-value">{totalAcceptedRaw.toLocaleString()}</div>
                   </div>
                 }
               >

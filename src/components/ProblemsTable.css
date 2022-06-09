@@ -26,3 +26,19 @@
   margin-bottom: 4px;
   cursor: pointer;
 }
+
+.popularity-tooltip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 4px;
+}
+
+.ac-rate-tooltip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 4px;
+}
+
+.tooltip-value {
+  text-align: right;
+}
