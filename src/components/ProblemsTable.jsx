@@ -13,7 +13,7 @@ const ProblemsTable = () => {
 
   useEffect(() => {
     setLoadingProblems(true);
-    axios.get('/info')  // TODO: support switch between development and production env
+    axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/info`)
       .then((response) => {
         const newProblems = Object.entries(response.data)
           .map(([_, value]) => value)
