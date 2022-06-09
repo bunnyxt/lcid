@@ -47,7 +47,7 @@ def static_robots():
 def go_redirect(problem_id):
     problem_info = problems_all.get(problem_id, None)
     if not problem_info:
-        return 'Fail to redirect to leetcode problem %s page.' % problem_id
+        return 'Fail to redirect to leetcode problem %s page.' % problem_id, 404
     return redirect('https://leetcode.com/problems/%s/' % problem_info['titleSlug'])
 
 
