@@ -11,11 +11,13 @@ This simple project, called LCid, provides directly access to LeetCode problems 
 - Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode-cn.com/problemset/all/) redirect.
 - CI/CD, fetch all LeetCode problems daily and commit back to repository via GitHub Actions, then trigger backend rebuild and redeploy with the latest problems via Heroku.
 
+![redirect-demo](redirect-demo.gif)
+
 LCid is now available at [lcid.cc](https://lcid.cc). Just add `/<problem-id>` at the end of `lcid.cc` (e.g. [lcid.cc/1](https://lcid.cc/1)), then browser will redirect you to the problem page. Simple, fast, and make your live easier.
 
 What's more, to redirect to China site, add `/cn/<problem-id>` instead (e.g. [lcid.cc/cn/1](https://lcid.cc/cn/1)). Interested in the brief info of the problem? Try `/info/<problem-id>` (e.g. [lcid.cc/info/1](https://lcid.cc/info/1)) and find more!
 
-More technical details introduced at [this blog](https://www.bunnyxt.com/blogs/lcid-cc-leetcode-problems-redirect-via-id/) (Chinese only).
+<!-- More technical details introduced at [this blog](https://www.bunnyxt.com/blogs/lcid-cc-leetcode-problems-redirect-via-id/) (Chinese only). -->
 
 ## Environment
 
