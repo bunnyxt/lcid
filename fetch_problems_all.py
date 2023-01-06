@@ -68,7 +68,7 @@ def fetch_problems(csrftoken, limit=50):
         },
     }
     encoded_data = json.dumps(data).encode('utf-8')
-    retry_count = 3
+    retry_count = 5
     for trial in range(1, retry_count + 1):
         r = http.request(
             'POST',
