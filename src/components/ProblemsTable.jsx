@@ -19,7 +19,7 @@ const ProblemsTable = () => {
           .map(([_, value]) => value)
           .map(obj => ({
             ...obj, 
-            popularity: obj.likes / Math.max(1, (obj.likes + obj.dislikes)) * 100,
+            likeRate: obj.likes / Math.max(1, (obj.likes + obj.dislikes)) * 100,
           }))
           .sort((a, b) => Number(a.frontendQuestionId) - Number(b.frontendQuestionId));
         setProblems(newProblems);
@@ -122,17 +122,17 @@ const ProblemsTable = () => {
           }}
         />
         <Table.Column 
-          title="Popularity" 
-          key="popularity" 
+          title="Like Rate" 
+          key="likeRate" 
           width={108}
-          sorter={(a, b) => b.popularity - a.popularity}
+          sorter={(a, b) => b.likeRate - a.likeRate}
           render={(problem) => {
-            const { likes, dislikes, popularity } = problem;
+            const { likes, dislikes, likeRate } = problem;
             return (
               <Tooltip 
                 placement="top" 
                 title={
-                  <div className="popularity-tooltip">
+                  <div className="like-rate-tooltip">
                     <div>likes:</div>
                     <div className="tooltip-value">{likes.toLocaleString()}</div>
                     <div>dislikes:</div>
@@ -140,7 +140,7 @@ const ProblemsTable = () => {
                   </div>
                 }
               >
-                {`${Math.round(popularity * 100) / 100}%`}
+                {`${Math.round(likeRate * 100) / 100}%`}
               </Tooltip>
             );
           }} 
