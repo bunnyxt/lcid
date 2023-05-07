@@ -8,7 +8,7 @@ const ProblemsTable = () => {
   const [problems, setProblems] = useState([]);
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
-  const [filtededDifficulty, setFilteredDifficulty] = useState([]);
+  const [filteredDifficulty, setFilteredDifficulty] = useState([]);
   const [redirectSite, setRedirectSite] = useState('com');
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const ProblemsTable = () => {
   }
 
   const handleChange = (_, filters) => {
-    if (!compareStringArray(filters.difficulty, filtededDifficulty)) {
+    if (!compareStringArray(filters.difficulty, filteredDifficulty)) {
       setFilteredDifficulty(filters.difficulty === null ? [] : filters.difficulty);
     }
     if (!compareStringArray(filters.topicTags, filteredTopics)) {
@@ -179,7 +179,7 @@ const ProblemsTable = () => {
             { text: 'Hard', value: 'Hard'}, 
           ]}
           onFilter={(value, record) => record.difficulty === value}
-          filteredValue={filtededDifficulty}
+          filteredValue={filteredDifficulty}
           render={(problem) => {
             const { difficulty } = problem;
             return <span className={`difficulty-${difficulty.toLowerCase()}`}>{difficulty}</span>;
