@@ -11,8 +11,8 @@ def get_csrftoken():
         'https://leetcode.com/problemset/all/',
         redirect=False
     )
-        raise RuntimeError('Fail to get csrftoken! status: %d, data: %s' % (r.status, r.data))
     if r.status != 200:
+        raise RuntimeError('Fail to get csrftoken! status: %d, data: %s' % (r.status, r.data))
     match_obj = re.search('csrftoken=(\S+); ', r.headers['Set-Cookie'])
     if match_obj:
         return match_obj.group(1)
