@@ -40,6 +40,8 @@ jobs:
       - name: Commit problems_all.json
         uses: stefanzweifel/git-auto-commit-action@v4.12.0
         with:
+          # Use different commit author name, differ from bunnyxt by default, avoid abuse of contribution graph
+          commit_author: bunnyxt-ci <bunnyxt-ci@users.noreply.github.com>
           # Commit message
           commit_message: 'ci: update problems_all.json'
           # File pattern used for `git add`. For example `src/\*.js`
