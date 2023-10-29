@@ -1,28 +1,22 @@
 import urllib3
 import json
-import re
 import time
+import os
+from dotenv import dotenv_values
+
+config = {
+    **dotenv_values(".env"),
+    **dotenv_values(".env.local"),
+    **os.environ,
+}
+
+# disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def get_csrftoken():
-    http = urllib3.PoolManager()
-    r = http.request(
-        'GET',
-        'https://leetcode.com/problemset/all/',
-        redirect=False
-    )
-    if r.status != 200:
-        raise RuntimeError('Fail to get csrftoken! status: %d, data: %s' % (r.status, r.data))
-    match_obj = re.search('csrftoken=(\S+); ', r.headers['Set-Cookie'])
-    if match_obj:
-        return match_obj.group(1)
-    else:
-        raise RuntimeError('Fail to parse csrftoken from headers! headers: %s' % r.headers)
-
-
-def fetch_problems(csrftoken, limit=50):
-    http = urllib3.PoolManager()
-    cookie = 'csrftoken=%s' % csrftoken
+def fetch_problems(cf_clearance, csrftoken, limit=50):
+    http = urllib3.PoolManager(cert_reqs='CERT_NONE')
+    cookie = 'cf_clearance=%s; csrftoken=%s' % (cf_clearance, csrftoken)
     data = {
         'query': '''
             query problemsetQuestionList(
@@ -76,7 +70,9 @@ def fetch_problems(csrftoken, limit=50):
             body=encoded_data,
             headers={
                 'Content-Type': 'application/json',
-                'cookie': cookie,
+                'Cookie': cookie,
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+                'X-Csrftoken': csrftoken,
             },
         )
         if r.status == 200:
@@ -91,17 +87,20 @@ def fetch_problems(csrftoken, limit=50):
 
 
 def main():
-    print('Now try get csrftoken...')
-    csrftoken = get_csrftoken()
-    print('Got csrftoken %s.' % csrftoken)
+    print('Now load cf_clearance and csrftoken...')
+    cf_clearance = config.get("LC_CF_CLEARANCE", None)
+    csrftoken = config.get("LC_CSRFTOKEN", None)
+    if not cf_clearance or not csrftoken:
+        raise RuntimeError('Fail to load cf_clearance and csrftoken from environ!')
+    print('Got cf_clearance %s and csrftoken %s.' % (cf_clearance, csrftoken))
 
     print('Now try get LeetCode problems total count...')
-    response_content = fetch_problems(csrftoken)
+    response_content = fetch_problems(cf_clearance, csrftoken)
     total_count = response_content['data']['problemsetQuestionList']['total']
     print('Found %d problems in total.' % total_count)
 
     print('Now try fetch all %d LeetCode problems...' % total_count)
-    response_content = fetch_problems(csrftoken, total_count)
+    response_content = fetch_problems(cf_clearance, csrftoken, total_count)
     questions_all = {q['frontendQuestionId']: q for q in
                      response_content['data']['problemsetQuestionList']['questions']}
     for question_id in questions_all.keys():
