@@ -37,6 +37,9 @@ jobs:
       # Runs fetch_problems_all.py
       - name: Run fetch_problems_all.py
         run: python fetch_problems_all.py
+        env:
+          LC_CF_CLEARANCE: ${{ secrets.LC_CF_CLEARANCE }}
+          LC_CSRFTOKEN: ${{ secrets.LC_CSRFTOKEN }}
       
       # Commit problems_all.json
       - name: Commit problems_all.json
