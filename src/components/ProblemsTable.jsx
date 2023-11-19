@@ -11,6 +11,24 @@ const ProblemsTable = () => {
   const [filteredDifficulty, setFilteredDifficulty] = useState([]);
   const [redirectSite, setRedirectSite] = useState('com');
 
+  const likeRateThresholds = useMemo(() => {
+    const likeRateSorted = problems.map(problem => problem.likeRate).sort((a, b) => a - b)
+    const thresholds = [
+      likeRateSorted[Math.floor(likeRateSorted.length / 3 * 1)],
+      likeRateSorted[Math.floor(likeRateSorted.length / 3 * 2)],
+    ];
+    return thresholds;
+  }, [problems]);
+  const calcLikeRateLevel = useCallback((likeRate) => {
+    if (likeRate < likeRateThresholds[0]) {
+      return 'low';
+    } else if (likeRate < likeRateThresholds[1]) {
+      return 'mid';
+    } else {
+      return 'high';
+    }
+  }, [likeRateThresholds]);
+
   const acRateThresholds = useMemo(() => {
     const acRateSorted = problems.map(problem => problem.acRate).sort((a, b) => a - b)
     const thresholds = [
@@ -158,7 +176,7 @@ const ProblemsTable = () => {
                   </div>
                 }
               >
-                {`${Math.round(likeRate * 100) / 100}%`}
+                <span className={`ac-rate-${calcAcRateLevel(likeRate)}`}>{`${Math.round(likeRate * 100) / 100}%`}</span>
               </Tooltip>
             );
           }} 
