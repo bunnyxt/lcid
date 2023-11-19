@@ -34,12 +34,11 @@
   color: #ff2d55;
 }
 
-.title-header {
+.all-problems-header {
   display: flex;
-}
-
-.title-header-content {
-  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .topics-container {

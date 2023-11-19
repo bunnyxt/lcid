@@ -112,7 +112,19 @@ const ProblemsTable = () => {
 
   return (
     <>
-      <h1>All Problems</h1>
+      <h1 className='all-problems-header'>
+        <span>All Problems</span>
+        <Tooltip
+          placement="top"
+          title={`Click problem title to redirect to leetcode ${redirectSite === 'cn' ? 'China' : 'global'} site`}
+        >
+          <Switch 
+            checkedChildren="China" 
+            unCheckedChildren="global" 
+            onChange={(checked) => setRedirectSite(checked ? 'cn' : 'com')} 
+          />
+        </Tooltip>
+      </h1>
       <Table 
         dataSource={problems} 
         rowKey="frontendQuestionId" 
