@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import { Table, Tag, Tooltip, Switch } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Table, Tag, Tooltip, Switch, Input, Space, Button } from 'antd';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
@@ -46,6 +47,17 @@ const ProblemsTable = () => {
       return 'high';
     }
   }, [acRateThresholds]);
+
+  const [searchTitleText, setSearchTitleText] = useState('');
+  const searchTitleInput = useRef(null);
+  const handleSearchTitle = (selectedKeys, confirm) => {
+    confirm();
+    setSearchTitleText(selectedKeys[0]);
+  };
+  const handleResetSearchTitle = (clearFilters) => {
+    clearFilters();
+    setSearchTitleText('');
+  };
 
   useEffect(() => {
     setLoadingProblems(true);
@@ -142,19 +154,64 @@ const ProblemsTable = () => {
           sorter={(a, b) => Number(a.frontendQuestionId) - Number(b.frontendQuestionId)}
         />
         <Table.Column 
-          title={
-            <div className="title-header">
-              <span className="title-header-content">Title</span>
-              <Tooltip placement="top" title="redirect site">
-                <Switch 
-                  checkedChildren="China" 
-                  unCheckedChildren="global" 
-                  onChange={(checked) => setRedirectSite(checked ? 'cn' : 'com')} 
-                />
-              </Tooltip>
-            </div>
-          } 
+          title="Title"
           key="title" 
+          filteredValue={searchTitleText ? [searchTitleText] : []}
+          filterDropdown={({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div
+              style={{
+                padding: 8,
+              }}
+              onKeyDown={(e) => e.stopPropagation()}
+            >
+              <Input
+                ref={searchTitleInput}
+                placeholder="Search title"
+                value={selectedKeys[0]}
+                onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                onPressEnter={() => handleSearchTitle(selectedKeys, confirm)}
+                style={{
+                  marginBottom: 8,
+                  display: 'block',
+                }}
+              />
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => handleSearchTitle(selectedKeys, confirm)}
+                  icon={<SearchOutlined />}
+                  size="small"
+                  style={{
+                    width: 90,
+                  }}
+                >
+                  Search
+                </Button>
+                <Button
+                  onClick={() => clearFilters && handleResetSearchTitle(clearFilters)}
+                  size="small"
+                  style={{
+                    width: 90,
+                  }}
+                >
+                  Reset
+                </Button>
+              </Space>
+            </div>
+          )}
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? '#1890ff' : undefined,
+              }}
+            />
+          )}
+          onFilter={(value, record) => record.title.toLowerCase().includes(value.toLowerCase())}
+          onFilterDropdownOpenChange={(visible) => {
+            if (visible) {
+              setTimeout(() => searchTitleInput.current?.select(), 100);
+            }
+          }}
           render={(problem) => {
             const { title, titleSlug } = problem;
             return (
