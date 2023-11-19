@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { Table, Tag, Tooltip, Switch } from 'antd';
 import './ProblemsTable.css';
@@ -10,6 +10,24 @@ const ProblemsTable = () => {
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [filteredDifficulty, setFilteredDifficulty] = useState([]);
   const [redirectSite, setRedirectSite] = useState('com');
+
+  const acRateThresholds = useMemo(() => {
+    const acRateSorted = problems.map(problem => problem.acRate).sort((a, b) => a - b)
+    const thresholds = [
+      acRateSorted[Math.floor(acRateSorted.length / 3 * 1)],
+      acRateSorted[Math.floor(acRateSorted.length / 3 * 2)],
+    ];
+    return thresholds;
+  }, [problems]);
+  const calcAcRateLevel = useCallback((acRate) => {
+    if (acRate < acRateThresholds[0]) {
+      return 'low';
+    } else if (acRate < acRateThresholds[1]) {
+      return 'mid';
+    } else {
+      return 'high';
+    }
+  }, [acRateThresholds]);
 
   useEffect(() => {
     setLoadingProblems(true);
@@ -164,7 +182,7 @@ const ProblemsTable = () => {
                   </div>
                 }
               >
-                {`${Math.round(acRate * 100) / 100}%`}
+                <span className={`ac-rate-${calcAcRateLevel(acRate)}`}>{`${Math.round(acRate * 100) / 100}%`}</span>
               </Tooltip>
             );
           }} 

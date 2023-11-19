@@ -1,3 +1,15 @@
+.ac-rate-high {
+  color: #00af9b;
+}
+
+.ac-rate-mid {
+  color: #ffb800;
+}
+
+.ac-rate-low {
+  color: #ff2d55;
+}
+
 .difficulty-easy {
   color: #00af9b;
 }
