@@ -41,6 +41,13 @@
   margin-bottom: 16px;
 }
 
+.search-title-dropdown {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+}
+
 .topics-container {
   margin-bottom: -4px;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { SearchOutlined } from '@ant-design/icons';
-import { Table, Tag, Tooltip, Switch, Input, Space, Button } from 'antd';
+import { Table, Tag, Tooltip, Switch, Input, Row, Col, Button } from 'antd';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
@@ -159,10 +159,8 @@ const ProblemsTable = () => {
           filteredValue={searchTitleText ? [searchTitleText] : []}
           filterDropdown={({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div
-              style={{
-                padding: 8,
-              }}
-              onKeyDown={(e) => e.stopPropagation()}
+              className='search-title-dropdown' 
+              onKeyDown={(e) => e.stopPropagation()} 
             >
               <Input
                 ref={searchTitleInput}
@@ -170,33 +168,28 @@ const ProblemsTable = () => {
                 value={selectedKeys[0]}
                 onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                 onPressEnter={() => handleSearchTitle(selectedKeys, confirm)}
-                style={{
-                  marginBottom: 8,
-                  display: 'block',
-                }}
               />
-              <Space>
-                <Button
-                  type="primary"
-                  onClick={() => handleSearchTitle(selectedKeys, confirm)}
-                  icon={<SearchOutlined />}
-                  size="small"
-                  style={{
-                    width: 90,
-                  }}
-                >
-                  Search
-                </Button>
-                <Button
-                  onClick={() => clearFilters && handleResetSearchTitle(clearFilters)}
-                  size="small"
-                  style={{
-                    width: 90,
-                  }}
-                >
-                  Reset
-                </Button>
-              </Space>
+              <Row gutter={8}>
+                <Col span={12}>
+                  <Button
+                    onClick={() => clearFilters && handleResetSearchTitle(clearFilters)}
+                    size="small"
+                    block
+                  >
+                    Reset
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    type="primary"
+                    onClick={() => handleSearchTitle(selectedKeys, confirm)}
+                    icon={<SearchOutlined />}
+                    size="small"
+                  >
+                    Search
+                  </Button>
+                </Col>
+              </Row>
             </div>
           )}
           filterIcon={(filtered) => (
