@@ -176,7 +176,7 @@ const ProblemsTable = () => {
                   </div>
                 }
               >
-                <span className={`ac-rate-${calcAcRateLevel(likeRate)}`}>{`${Math.round(likeRate * 100) / 100}%`}</span>
+                <span className={`ac-rate-${calcLikeRateLevel(likeRate)}`}>{`${Math.round(likeRate * 100) / 100}%`}</span>
               </Tooltip>
             );
           }} 
