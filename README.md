@@ -54,12 +54,13 @@ LC_CSRFTOKEN="{manually get from browser}"
 To fetch all problems, execute `python fetch_problems_all.py`. Then, you will see the logs below.
 
 ```zsh
-Now try get csrftoken...
-Got csrftoken fakecsrftokenfakecsrftokenfakecsrftokenfakecsrftokenfakecsrftoke.
-Found 2060 problems in total.
-Now try fetch all 2060 LeetCode problems...
-All 2060 problems fetched.
-All 2060 problems info saved into problems_all.json file.
+Now load cf_clearance and csrftoken...
+Got cf_clearance {manually get from browser} and csrftoken {manually get from browser}.
+Now try get LeetCode problems total count...
+Found 3333 problems in total.
+Now try fetch all 3333 LeetCode problems...
+All 3333 problems fetched.
+All 3333 problems info saved into problems_all.json file.
 ```
 
 After few seconds, all problems info have been saved into `problems_all.json` file in json format.
