@@ -48,6 +48,17 @@ const ProblemsTable = () => {
     }
   }, [acRateThresholds]);
 
+  const [searchIdText, setSearchIdText] = useState('');
+  const searchIdInput = useRef(null);
+  const handleSearchId = (selectedKeys, confirm) => {
+    confirm();
+    setSearchIdText(selectedKeys[0]);
+  };
+  const handleResetSearchId = (clearFilters) => {
+    clearFilters();
+    setSearchIdText('');
+  };
+
   const [searchTitleText, setSearchTitleText] = useState('');
   const searchTitleInput = useRef(null);
   const handleSearchTitle = (selectedKeys, confirm) => {
@@ -149,9 +160,58 @@ const ProblemsTable = () => {
           title="Id" 
           dataIndex="frontendQuestionId" 
           key="frontendQuestionId" 
-          width={72}
+          width={84}
           fixed="left"
           sorter={(a, b) => Number(a.frontendQuestionId) - Number(b.frontendQuestionId)}
+          filteredValue={searchIdText ? [searchIdText] : []}
+          filterDropdown={({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div
+              className='search-id-dropdown' 
+              onKeyDown={(e) => e.stopPropagation()} 
+            >
+              <Input
+                ref={searchIdInput}
+                placeholder="Search id"
+                value={selectedKeys[0]}
+                onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                onPressEnter={() => handleSearchId(selectedKeys, confirm)}
+              />
+              <Row gutter={8}>
+                <Col span={12}>
+                  <Button
+                    onClick={() => clearFilters && handleResetSearchId(clearFilters)}
+                    size="small"
+                    block
+                  >
+                    Reset
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    type="primary"
+                    onClick={() => handleSearchId(selectedKeys, confirm)}
+                    icon={<SearchOutlined />}
+                    size="small"
+                  >
+                    Search
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          )}
+          filterIcon={(filtered) => (
+            <SearchOutlined
+              style={{
+                color: filtered ? '#1890ff' : undefined,
+              }}
+            />
+          )}
+          onFilter={(value, record) => record.frontendQuestionId.toString().includes(value.toString())}
+          onFilterDropdownOpenChange={(visible) => {
+            if (visible) {
+              setTimeout(() => searchIdInput.current?.select(), 100);
+            }
+          }}
         />
         <Table.Column 
           title="Title"
