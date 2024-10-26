@@ -86,7 +86,7 @@ Now you can try the following endpoints. All of them should work correctly.
 
 To deploy the system for public access, of course, you can use any platform you like. Here, I use GitHub Actions and Heroku.
 
-- GitHub Actions is used to fetch all LeetCode problems daily (execute `python fetch_problems_all.py`, get the latest `problems_all.json`) and commit back to repository. You would know how it works by analysing [this config file](.github/workflows/main.yml).
+- GitHub Actions is used to fetch all LeetCode problems daily (execute `python fetch_problems_all.py`, get the latest `problems_all.json`) and commit back to repository. You would know how it works by analyzing [this config file](.github/workflows/main.yml).
   - Don't forget to set required sensitive environment variables in GitHub Secrets (`settings/secrets/actions`).
 - Heroku would rebuild and redeploy the backend service once [main branch of this repository](https://github.com/bunnyxt/lcid) changed. This can be configured at `Deploy - Automatic deploys` in your Heroku app dashboard.
 - Heroku also support add additional domains to visit app. [Here](https://devcenter.heroku.com/articles/custom-domains) is the official guide.
