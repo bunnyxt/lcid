@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { SearchOutlined } from '@ant-design/icons';
-import { Table, Tag, Tooltip, Switch, Input, Row, Col, Button } from 'antd';
+import { Table, Tag, Tooltip, Switch, Input, Row, Col, Button, Space } from 'antd';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
@@ -11,6 +11,7 @@ const ProblemsTable = () => {
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [filteredDifficulty, setFilteredDifficulty] = useState([]);
   const [redirectSite, setRedirectSite] = useState('com');
+  const [showPremium, setShowPremium] = useState(false);
 
   const likeRateThresholds = useMemo(() => {
     const likeRateSorted = problems.map(problem => problem.likeRate).sort((a, b) => a - b)
@@ -133,23 +134,42 @@ const ProblemsTable = () => {
     }
   };
 
+  const problemsToShow = useMemo(() => {
+    if (showPremium) {
+      return problems;
+    }
+    return problems.filter(problem => !problem.paidOnly);
+  }, [problems, showPremium]);
+
   return (
     <>
       <h1 className='all-problems-header'>
         <span>All Problems</span>
-        <Tooltip
-          placement="top"
-          title={`Click problem title to redirect to leetcode ${redirectSite === 'cn' ? 'China' : 'global'} site`}
-        >
-          <Switch 
-            checkedChildren="China" 
-            unCheckedChildren="global" 
-            onChange={(checked) => setRedirectSite(checked ? 'cn' : 'com')} 
-          />
-        </Tooltip>
+        <Space>
+          <Tooltip
+            placement="top"
+            title="Toggle to show/hide premium problems"
+          >
+            <Switch 
+              checkedChildren="Show Premium" 
+              unCheckedChildren="Hide Premium" 
+              onChange={(checked) => setShowPremium(checked)} 
+            />
+          </Tooltip>
+          <Tooltip
+            placement="top"
+            title={`Click problem title to redirect to leetcode ${redirectSite === 'cn' ? 'China' : 'global'} site`}
+          >
+            <Switch 
+              checkedChildren="China site" 
+              unCheckedChildren="global site" 
+              onChange={(checked) => setRedirectSite(checked ? 'cn' : 'com')} 
+            />
+            </Tooltip>
+        </Space>
       </h1>
       <Table 
-        dataSource={problems} 
+        dataSource={problemsToShow} 
         rowKey="frontendQuestionId" 
         loading={loadingProblems}
         onChange={handleChange}
