@@ -6,3 +6,7 @@
 .redirect-link-suffix span:hover {
   color: #1890ff;
 }
+
+.premium-tag {
+  margin-left: 8px;
+}

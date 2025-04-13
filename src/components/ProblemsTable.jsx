@@ -266,7 +266,7 @@ const ProblemsTable = () => {
             }
           }}
           render={(problem) => {
-            const { title, titleSlug } = problem;
+            const { title, titleSlug, paidOnly } = problem;
             return (
               <span className="title">
                 <a 
@@ -275,6 +275,7 @@ const ProblemsTable = () => {
                   rel="noreferrer"
                   title={`go to problem page of ${titleSlug}`}
                 >{title}</a>
+                {paidOnly && <Tag className='premium-tag' color="gold">Premium</Tag>}
               </span>
             );
           }}
