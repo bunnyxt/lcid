@@ -1,24 +1,12 @@
-.like-rate-high {
+.rate-high {
   color: #00af9b;
 }
 
-.like-rate-mid {
+.rate-mid {
   color: #ffb800;
 }
 
-.like-rate-low {
-  color: #ff2d55;
-}
-
-.ac-rate-high {
-  color: #00af9b;
-}
-
-.ac-rate-mid {
-  color: #ffb800;
-}
-
-.ac-rate-low {
+.rate-low {
   color: #ff2d55;
 }
 
@@ -94,7 +82,7 @@
   gap: 0 4px;
 }
 
-.ac-rate-tooltip {
+.rate-tooltip {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 4px;
@@ -102,4 +90,12 @@
 
 .tooltip-value {
   text-align: right;
+}
+
+.rate-container {
+  max-width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: help;
 }

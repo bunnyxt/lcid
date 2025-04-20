@@ -8,7 +8,7 @@ const RedirectCard = () => {
   const [problemId, setProblemId] = useState('146');
   const redirectIdInputRef = useRef(null);
 
-  const MAX_RANDOM_PROBLEM_ID = 300;
+  const MAX_RANDOM_PROBLEM_ID = 1000;
   const setRandomProblemId = () => {
     setProblemId('' + Math.ceil(Math.random() * MAX_RANDOM_PROBLEM_ID));
   };
@@ -23,7 +23,7 @@ const RedirectCard = () => {
   useEffect(() => {
     // initialize problem id
     setRandomProblemId();
-    // set id inpurt focus
+    // set id input focus
     redirectIdInputRef.current.focus({ cursor: 'end' });
   }, []);
 
@@ -40,7 +40,7 @@ const RedirectCard = () => {
         addonBefore="LeetCode problem id"
         suffix={
           <div className="redirect-id-input-suffix">
-            <Tooltip placement="top" title="refresh">
+            <Tooltip placement="top" title="get random problem id">
               <RedoOutlined onClick={() => setRandomProblemId()} />
             </Tooltip>
           </div>

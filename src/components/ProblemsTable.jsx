@@ -3,6 +3,7 @@ import axios from 'axios';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { Table, Tag, Tooltip, Input, Row, Col, Button, Popover } from 'antd';
 import ProblemsTableControl from './ProblemsTableControl';
+import ColorIndicator from './ColorIndicator';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
@@ -17,14 +18,16 @@ const ProblemsTable = () => {
   const [showPremium, setShowPremium] = useState(true);
   const [showTopics, setShowTopics] = useState(true);
 
+  const likeRateSorted = useMemo(() => { 
+    return problems.map(problem => problem.likeRate).sort((a, b) => a - b)
+  }, [problems]);
   const likeRateThresholds = useMemo(() => {
-    const likeRateSorted = problems.map(problem => problem.likeRate).sort((a, b) => a - b)
     const thresholds = [
       likeRateSorted[Math.floor(likeRateSorted.length / 3 * 1)],
       likeRateSorted[Math.floor(likeRateSorted.length / 3 * 2)],
     ];
     return thresholds;
-  }, [problems]);
+  }, [likeRateSorted]);
   const calcLikeRateLevel = useCallback((likeRate) => {
     if (likeRate < likeRateThresholds[0]) {
       return 'low';
@@ -34,15 +37,20 @@ const ProblemsTable = () => {
       return 'high';
     }
   }, [likeRateThresholds]);
+  const calcLikeRatePosition = useCallback((likeRate) => {
+    return likeRateSorted.findIndex(rate => rate >= likeRate) / likeRateSorted.length;
+  }, [likeRateSorted]);
 
+  const acRateSorted = useMemo(() => { 
+    return problems.map(problem => problem.acRate).sort((a, b) => a - b)
+  }, [problems]);
   const acRateThresholds = useMemo(() => {
-    const acRateSorted = problems.map(problem => problem.acRate).sort((a, b) => a - b)
     const thresholds = [
       acRateSorted[Math.floor(acRateSorted.length / 3 * 1)],
       acRateSorted[Math.floor(acRateSorted.length / 3 * 2)],
     ];
     return thresholds;
-  }, [problems]);
+  }, [acRateSorted]);
   const calcAcRateLevel = useCallback((acRate) => {
     if (acRate < acRateThresholds[0]) {
       return 'low';
@@ -52,6 +60,9 @@ const ProblemsTable = () => {
       return 'high';
     }
   }, [acRateThresholds]);
+  const calcAcRatePosition = useCallback((acRate) => {
+    return acRateSorted.findIndex(rate => rate >= acRate) / acRateSorted.length;
+  }, [acRateSorted]);
 
   const [searchIdText, setSearchIdText] = useState('');
   const searchIdInput = useRef(null);
@@ -319,19 +330,25 @@ const ProblemsTable = () => {
           sorter={(a, b) => b.likeRate - a.likeRate}
           render={(problem) => {
             const { likes, dislikes, likeRate } = problem;
+            const position = calcLikeRatePosition(likeRate);
             return (
               <Tooltip 
                 placement="top" 
                 title={
-                  <div className="like-rate-tooltip">
+                  <div className="rate-tooltip">
                     <div>likes:</div>
                     <div className="tooltip-value">{likes.toLocaleString()}</div>
                     <div>dislikes:</div>
                     <div className="tooltip-value">{dislikes.toLocaleString()}</div>
+                    <div>beats:</div>
+                    <div className="tooltip-value">{Math.round(position * 100)}%</div>
                   </div>
                 }
               >
-                <span className={`ac-rate-${calcLikeRateLevel(likeRate)}`}>{`${Math.round(likeRate * 100) / 100}%`}</span>
+                <div className="rate-container">
+                  <span className={`rate-${calcLikeRateLevel(likeRate)}`}>{`${Math.round(likeRate * 100) / 100}%`}</span>
+                  <ColorIndicator position={position} />
+                </div>
               </Tooltip>
             );
           }} 
@@ -343,19 +360,25 @@ const ProblemsTable = () => {
           sorter={(a, b) => b.acRate - a.acRate}
           render={(problem) => {
             const { acRate, totalSubmissionRaw, totalAcceptedRaw } = problem;
+            const position = calcAcRatePosition(acRate);
             return (
               <Tooltip 
                 placement="top" 
                 title={
-                  <div className="ac-rate-tooltip">
+                  <div className="rate-tooltip">
                     <div>accepted:</div>
                     <div className="tooltip-value">{totalSubmissionRaw.toLocaleString()}</div>
                     <div>submitted:</div>
                     <div className="tooltip-value">{totalAcceptedRaw.toLocaleString()}</div>
+                    <div>beats:</div>
+                    <div className="tooltip-value">{Math.round(position * 100)}%</div>
                   </div>
                 }
               >
-                <span className={`ac-rate-${calcAcRateLevel(acRate)}`}>{`${Math.round(acRate * 100) / 100}%`}</span>
+                <div className="rate-container">
+                  <span className={`rate-${calcAcRateLevel(acRate)}`}>{`${Math.round(acRate * 100) / 100}%`}</span>
+                  <ColorIndicator position={position} />
+                </div>
               </Tooltip>
             );
           }} 
@@ -386,11 +409,14 @@ const ProblemsTable = () => {
           onFilter={(value, record) => record.topicTags.filter(topic => topic.id === value).length > 0}
           filteredValue={filteredTopics}
           render={(problem) => {
+            if (!showTopics) {
+              return <span className="topics-hidden">Topics hidden as requested</span>
+            }
             const { topicTags } = problem;
             return (
               <div className="topics-container">
                 {
-                  showTopics ? topicTags.map(
+                  topicTags.map(
                     topic => {
                       const included = filteredTopics.includes(topic.id);
                       return (
@@ -409,7 +435,7 @@ const ProblemsTable = () => {
                         >{topic.name}</Tag>
                       );
                     }
-                  ) : <span className="topics-hidden">Topics hidden as requested</span>
+                  )
                 }
               </div>
             );
