@@ -386,11 +386,14 @@ const ProblemsTable = () => {
           onFilter={(value, record) => record.topicTags.filter(topic => topic.id === value).length > 0}
           filteredValue={filteredTopics}
           render={(problem) => {
+            if (!showTopics) {
+              return <span className="topics-hidden">Topics hidden as requested</span>
+            }
             const { topicTags } = problem;
             return (
               <div className="topics-container">
                 {
-                  showTopics ? topicTags.map(
+                  topicTags.map(
                     topic => {
                       const included = filteredTopics.includes(topic.id);
                       return (
@@ -409,7 +412,7 @@ const ProblemsTable = () => {
                         >{topic.name}</Tag>
                       );
                     }
-                  ) : <span className="topics-hidden">Topics hidden as requested</span>
+                  )
                 }
               </div>
             );
