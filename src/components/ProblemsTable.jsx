@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
-import { SearchOutlined } from '@ant-design/icons';
-import { Table, Tag, Tooltip, Switch, Input, Row, Col, Button, Space } from 'antd';
+import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { Table, Tag, Tooltip, Input, Row, Col, Button, Popover } from 'antd';
+import ProblemsTableControl from './ProblemsTableControl';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
@@ -10,9 +11,12 @@ const ProblemsTable = () => {
   const [topics, setTopics] = useState([]);
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [filteredDifficulty, setFilteredDifficulty] = useState([]);
+
+  const [controlPopoverOpen, setControlPopoverOpen] = useState(false);
   const [redirectSite, setRedirectSite] = useState('com');
   const [showPremium, setShowPremium] = useState(true);
   const [showTopics, setShowTopics] = useState(true);
+
   const likeRateThresholds = useMemo(() => {
     const likeRateSorted = problems.map(problem => problem.likeRate).sort((a, b) => a - b)
     const thresholds = [
@@ -145,41 +149,36 @@ const ProblemsTable = () => {
     <>
       <h1 className='all-problems-header'>
         <span>All Problems</span>
-        <Space>
-        <Tooltip
-            placement="top"
-            title="Toggle to show/hide problem topics"
+        <div className='header-settings'>
+          <ProblemsTableControl
+            direction="horizontal"
+            showPremium={showPremium}
+            setShowPremium={setShowPremium}
+            showTopics={showTopics}
+            setShowTopics={setShowTopics}
+            redirectSite={redirectSite}
+            setRedirectSite={setRedirectSite}
+          />
+        </div>
+        <div className='header-settings-with-popover'>
+          <Popover
+            content={<ProblemsTableControl
+              direction="vertical"
+              showPremium={showPremium}
+              setShowPremium={setShowPremium}
+              showTopics={showTopics}
+              setShowTopics={setShowTopics}
+              redirectSite={redirectSite}
+              setRedirectSite={setRedirectSite}
+            />}
+            trigger="click"
+            placement="bottomRight"
+            open={controlPopoverOpen}
+            onOpenChange={setControlPopoverOpen}
           >
-            <Switch
-              checked={showTopics}
-              checkedChildren="Show Topics" 
-              unCheckedChildren="Hide Topics" 
-              onChange={(checked) => setShowTopics(checked)} 
-            />
-          </Tooltip>
-          <Tooltip
-            placement="top"
-            title="Toggle to show/hide premium problems"
-          >
-            <Switch
-              checked={showPremium}
-              checkedChildren="Show Premium" 
-              unCheckedChildren="Hide Premium" 
-              onChange={(checked) => setShowPremium(checked)} 
-            />
-          </Tooltip>
-          <Tooltip
-            placement="top"
-            title={`Click problem title to redirect to leetcode ${redirectSite === 'cn' ? 'China' : 'global'} site`}
-          >
-            <Switch
-              checked={redirectSite === 'com'}
-              checkedChildren="Global site" 
-              unCheckedChildren="China site" 
-              onChange={(checked) => setRedirectSite(checked ? 'com' : 'cn')} 
-            />
-            </Tooltip>
-        </Space>
+            <Button icon={<SettingOutlined />}>Settings</Button>
+          </Popover>
+        </div>
       </h1>
       <Table 
         dataSource={problemsToShow} 

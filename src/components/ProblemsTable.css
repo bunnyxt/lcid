@@ -41,9 +41,23 @@
   margin-bottom: 16px;
 }
 
+.header-settings {
+  display: flex;
+  justify-content: center;
+}
+
+.header-settings-with-popover {
+  display: none;
+}
+
 @media screen and (max-width: 767px) {
-  .all-problems-header {
-    grid-template-columns: 1fr;
+  .header-settings {
+    display: none;
+  }
+
+  .header-settings-with-popover {
+    display: flex;
+    justify-content: center;
   }
 }
 
