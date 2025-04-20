@@ -70,6 +70,10 @@
   cursor: pointer;
 }
 
+.topics-hidden {
+  color: #bfbfbf;
+}
+
 .popularity-tooltip {
   display: grid;
   grid-template-columns: 1fr 1fr;

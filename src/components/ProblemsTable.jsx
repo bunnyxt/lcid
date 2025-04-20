@@ -11,8 +11,8 @@ const ProblemsTable = () => {
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [filteredDifficulty, setFilteredDifficulty] = useState([]);
   const [redirectSite, setRedirectSite] = useState('com');
-  const [showPremium, setShowPremium] = useState(false);
-
+  const [showPremium, setShowPremium] = useState(true);
+  const [showTopics, setShowTopics] = useState(true);
   const likeRateThresholds = useMemo(() => {
     const likeRateSorted = problems.map(problem => problem.likeRate).sort((a, b) => a - b)
     const thresholds = [
@@ -146,11 +146,23 @@ const ProblemsTable = () => {
       <h1 className='all-problems-header'>
         <span>All Problems</span>
         <Space>
+        <Tooltip
+            placement="top"
+            title="Toggle to show/hide problem topics"
+          >
+            <Switch
+              checked={showTopics}
+              checkedChildren="Show Topics" 
+              unCheckedChildren="Hide Topics" 
+              onChange={(checked) => setShowTopics(checked)} 
+            />
+          </Tooltip>
           <Tooltip
             placement="top"
             title="Toggle to show/hide premium problems"
           >
-            <Switch 
+            <Switch
+              checked={showPremium}
               checkedChildren="Show Premium" 
               unCheckedChildren="Hide Premium" 
               onChange={(checked) => setShowPremium(checked)} 
@@ -160,10 +172,11 @@ const ProblemsTable = () => {
             placement="top"
             title={`Click problem title to redirect to leetcode ${redirectSite === 'cn' ? 'China' : 'global'} site`}
           >
-            <Switch 
-              checkedChildren="China site" 
-              unCheckedChildren="global site" 
-              onChange={(checked) => setRedirectSite(checked ? 'cn' : 'com')} 
+            <Switch
+              checked={redirectSite === 'com'}
+              checkedChildren="Global site" 
+              unCheckedChildren="China site" 
+              onChange={(checked) => setRedirectSite(checked ? 'com' : 'cn')} 
             />
             </Tooltip>
         </Space>
@@ -378,7 +391,7 @@ const ProblemsTable = () => {
             return (
               <div className="topics-container">
                 {
-                  topicTags.map(
+                  showTopics ? topicTags.map(
                     topic => {
                       const included = filteredTopics.includes(topic.id);
                       return (
@@ -397,7 +410,7 @@ const ProblemsTable = () => {
                         >{topic.name}</Tag>
                       );
                     }
-                  )
+                  ) : <span className="topics-hidden">Topics hidden as requested</span>
                 }
               </div>
             );
