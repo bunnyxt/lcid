@@ -127,7 +127,7 @@ const ProblemsTable = () => {
       }
     }
     return true;
-  }
+  };
 
   const handleChange = (_, filters) => {
     if (!compareStringArray(filters.difficulty, filteredDifficulty)) {
