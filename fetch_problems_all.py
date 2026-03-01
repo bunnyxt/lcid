@@ -1,6 +1,7 @@
 import urllib3
 import json
 import time
+import random
 import os
 from dotenv import dotenv_values
 
@@ -102,7 +103,7 @@ def fetch_all_problems(cf_clearance, csrftoken):
         all_questions.extend(questions)
         print('Fetched page %d: %d/%d problems' % (skip // PAGE_SIZE + 1, len(all_questions), total_count))
         skip += PAGE_SIZE
-        time.sleep(0.5)
+        time.sleep(0.5 + random.random())
 
     return all_questions
 
