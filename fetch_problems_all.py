@@ -1,6 +1,7 @@
 import urllib3
 import json
 import time
+import random
 import os
 from dotenv import dotenv_values
 
@@ -14,7 +15,10 @@ config = {
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def fetch_problems(cf_clearance, csrftoken, limit=50):
+PAGE_SIZE = 100
+
+
+def fetch_problems_page(cf_clearance, csrftoken, limit=PAGE_SIZE, skip=0):
     http = urllib3.PoolManager(cert_reqs='CERT_NONE')
     cookie = 'cf_clearance=%s; csrftoken=%s' % (cf_clearance, csrftoken)
     data = {
@@ -56,7 +60,7 @@ def fetch_problems(cf_clearance, csrftoken, limit=50):
         ''',
         'variables': {
             'categorySlug': '',
-            'skip': 0,
+            'skip': skip,
             'limit': limit,
             'filters': {},
         },
@@ -86,6 +90,24 @@ def fetch_problems(cf_clearance, csrftoken, limit=50):
     return response_content
 
 
+def fetch_all_problems(cf_clearance, csrftoken):
+    first_page = fetch_problems_page(cf_clearance, csrftoken, limit=PAGE_SIZE, skip=0)
+    total_count = first_page['data']['problemsetQuestionList']['total']
+    all_questions = list(first_page['data']['problemsetQuestionList']['questions'])
+    print('Fetched page 1: %d/%d problems' % (len(all_questions), total_count))
+
+    skip = PAGE_SIZE
+    while skip < total_count:
+        page = fetch_problems_page(cf_clearance, csrftoken, limit=PAGE_SIZE, skip=skip)
+        questions = page['data']['problemsetQuestionList']['questions']
+        all_questions.extend(questions)
+        print('Fetched page %d: %d/%d problems' % (skip // PAGE_SIZE + 1, len(all_questions), total_count))
+        skip += PAGE_SIZE
+        time.sleep(0.5 + random.random())
+
+    return all_questions
+
+
 def main():
     print('Now load cf_clearance and csrftoken...')
     cf_clearance = config.get("LC_CF_CLEARANCE", None)
@@ -94,15 +116,10 @@ def main():
         raise RuntimeError('Fail to load cf_clearance and csrftoken from environ!')
     print('Got cf_clearance %s and csrftoken %s.' % (cf_clearance, csrftoken))
 
-    print('Now try get LeetCode problems total count...')
-    response_content = fetch_problems(cf_clearance, csrftoken)
-    total_count = response_content['data']['problemsetQuestionList']['total']
-    print('Found %d problems in total.' % total_count)
+    print('Now fetching all LeetCode problems (paginated, %d per page)...' % PAGE_SIZE)
+    all_questions = fetch_all_problems(cf_clearance, csrftoken)
 
-    print('Now try fetch all %d LeetCode problems...' % total_count)
-    response_content = fetch_problems(cf_clearance, csrftoken, total_count)
-    questions_all = {q['frontendQuestionId']: q for q in
-                     response_content['data']['problemsetQuestionList']['questions']}
+    questions_all = {q['frontendQuestionId']: q for q in all_questions}
     for question_id in questions_all.keys():
         question_stats_json = questions_all[question_id]['stats']
         totalAcceptedRaw = totalSubmissionRaw = None
@@ -115,11 +132,11 @@ def main():
         questions_all[question_id]['totalAcceptedRaw'] = totalAcceptedRaw
         questions_all[question_id]['totalSubmissionRaw'] = totalSubmissionRaw
         del questions_all[question_id]['stats']
-    print('All %d problems fetched.' % total_count)
+    print('All %d problems fetched.' % len(questions_all))
 
     with open('problems_all.json', 'w') as f:
         f.write(json.dumps(questions_all))
-        print('All %d problems info saved into problems_all.json file.' % total_count)
+        print('All %d problems info saved into problems_all.json file.' % len(questions_all))
 
 
 if __name__ == '__main__':
