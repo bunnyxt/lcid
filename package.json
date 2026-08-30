@@ -50,5 +50,8 @@
     "eslint-plugin-n": "^15.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.0"
+  },
+  "overrides": {
+    "loader-utils": "3.2.1"
   }
 }
