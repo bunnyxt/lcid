@@ -29,7 +29,7 @@ To install all those dependencies, execute `pip install -r requirements`.
 
 The frontend is built with `React.js` with `Ant Design` UI.
 
-To build frontend, you should have `Node.js 16.13.2+` with `npm 8.1.2+` installed.
+To build frontend, use `Node.js 22.x` with `npm 10.x`, matching the versions used by Heroku.
 
 (older versions may work but not tested)
 
@@ -44,7 +44,7 @@ For now, it is difficult to automate way to get both `cf_clearance` and `csrftok
 Once we fetched `cf_clearance` and `csrftoken` from browser, copy file `.env` to `.env.local`, fill both fields accordingly.
 
 ```
-REACT_APP_BACKEND_API_URL="http://localhost:1437"
+VITE_BACKEND_API_URL="http://localhost:1437"
 LC_CF_CLEARANCE="{manually get from browser}"
 LC_CSRFTOKEN="{manually get from browser}"
 ```
@@ -89,6 +89,7 @@ To deploy the system for public access, of course, you can use any platform you 
 - GitHub Actions is used to fetch all LeetCode problems daily (execute `python fetch_problems_all.py`, get the latest `problems_all.json`) and commit back to repository. You would know how it works by analyzing [this config file](.github/workflows/main.yml).
   - Don't forget to set required sensitive environment variables in GitHub Secrets (`settings/secrets/actions`).
 - Heroku would rebuild and redeploy the backend service once [main branch of this repository](https://github.com/bunnyxt/lcid) changed. This can be configured at `Deploy - Automatic deploys` in your Heroku app dashboard.
+  - Configure the Heroku Node.js buildpack before the Python buildpack. Node.js 22 and npm 10 run `heroku-postbuild`, which creates the Vite bundle in `build/`; the Python process in `Procfile` then serves that directory with Flask and Waitress.
 - Heroku also support add additional domains to visit app. [Here](https://devcenter.heroku.com/articles/custom-domains) is the official guide.
 
 ## Disclaimer
