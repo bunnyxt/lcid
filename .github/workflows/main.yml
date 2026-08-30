@@ -22,11 +22,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Setup Python
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
@@ -42,7 +42,7 @@ jobs:
       
       # Commit problems_all.json
       - name: Commit problems_all.json
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           # Use different commit author name, differ from bunnyxt by default, avoid abuse of contribution graph
           commit_author: bunnyxt-ci <bunnyxt-ci@users.noreply.github.com>
