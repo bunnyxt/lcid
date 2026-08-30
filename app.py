@@ -1,5 +1,5 @@
 import sys
-from flask import Flask, redirect
+from flask import Flask, jsonify, redirect
 from flask_cors import CORS
 from waitress import serve
 import json
@@ -55,21 +55,24 @@ def go_redirect(problem_id):
 def go_redirect_cn(problem_id):
     problem_info = problems_all.get(problem_id, None)
     if not problem_info:
-        return 'Fail to redirect to leetcode-cn problem %s page.' % problem_id
-    return redirect('https://leetcode-cn.com/problems/%s/' % problem_info['titleSlug'])
+        return 'Fail to redirect to leetcode.cn problem %s page.' % problem_id, 404
+    return redirect('https://leetcode.cn/problems/%s/' % problem_info['titleSlug'])
 
 
 @app.route('/info')
 def info_all():
-    return json.dumps(problems_all)
+    return jsonify(problems_all)
 
 
 @app.route('/info/<problem_id>')
 def info(problem_id):
     problem_info = problems_all.get(problem_id, None)
     if not problem_info:
-        return '{"code":404,"message":"Fail to get info of leetcode problem %s."}' % problem_id, 404
-    return json.dumps(problems_all[problem_id])
+        return jsonify(
+            code=404,
+            message='Fail to get info of leetcode problem %s.' % problem_id,
+        ), 404
+    return jsonify(problem_info)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ This simple project, called LCid, provides directly access to LeetCode problems 
 
 - Fetch all LeetCode problems via crawler.
 - Redirect to LeetCode problem page with problem id in the URL path via backend.
-- Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode-cn.com/problemset/all/) redirect.
+- Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode.cn/problemset/all/) redirect.
 - CI/CD, fetch all LeetCode problems daily and commit back to repository via GitHub Actions, then trigger backend rebuild and redeploy with the latest problems via Heroku.
 
 ![redirect-demo](redirect-demo.gif)
