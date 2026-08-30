@@ -88,7 +88,7 @@ const ProblemsTable = () => {
 
   useEffect(() => {
     setLoadingProblems(true);
-    axios.get(`${process.env.REACT_APP_BACKEND_API_URL}/info`)
+    axios.get(`${import.meta.env.VITE_BACKEND_API_URL || ''}/info`)
       .then((response) => {
         const newProblems = Object.entries(response.data)
           .map(([_, value]) => value)
