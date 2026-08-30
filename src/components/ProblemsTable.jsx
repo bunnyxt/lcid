@@ -313,7 +313,7 @@ const ProblemsTable = () => {
             return (
               <span className="title">
                 <a 
-                  href={`https://www.leetcode.${redirectSite}/problems/${titleSlug}`} 
+                  href={`https://leetcode.${redirectSite}/problems/${titleSlug}`}
                   target="_blank" 
                   rel="noreferrer"
                   title={`go to problem page of ${titleSlug}`}
