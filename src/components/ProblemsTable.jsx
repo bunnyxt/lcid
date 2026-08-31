@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import axios from 'axios';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import { Table, Tag, Tooltip, Input, Row, Col, Button, Popover } from 'antd';
 import ProblemsTableControl from './ProblemsTableControl';
@@ -88,9 +87,15 @@ const ProblemsTable = () => {
 
   useEffect(() => {
     setLoadingProblems(true);
-    axios.get(`${import.meta.env.VITE_BACKEND_API_URL || ''}/info`)
+    fetch(`${import.meta.env.VITE_BACKEND_API_URL || ''}/info`)
       .then((response) => {
-        const newProblems = Object.entries(response.data)
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const newProblems = Object.entries(data)
           .map(([_, value]) => value)
           .map(obj => ({
             ...obj, 
