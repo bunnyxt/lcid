@@ -1,8 +1,9 @@
-import React from 'react';
-import { App as AntApp } from 'antd';
+import React, { lazy, Suspense } from 'react';
+import { App as AntApp, Spin } from 'antd';
 import './App.css';
 import RedirectCard from './components/RedirectCard';
-import ProblemsTable from './components/ProblemsTable';
+
+const ProblemsTable = lazy(() => import('./components/ProblemsTable'));
 
 const App = () => {
   return (
@@ -12,7 +13,9 @@ const App = () => {
           <RedirectCard />
         </div>
         <div className="problems-table-wrapper">
-          <ProblemsTable />
+          <Suspense fallback={<div className="problems-table-fallback"><Spin size="large" /></div>}>
+            <ProblemsTable />
+          </Suspense>
         </div>
       </div>
     </AntApp>

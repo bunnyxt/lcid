@@ -19,6 +19,12 @@ code {
   max-width: 1600px;
 }
 
+.problems-table-fallback {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
 @media screen and (max-width: 767px) {
   .App {
     padding: 2rem;
