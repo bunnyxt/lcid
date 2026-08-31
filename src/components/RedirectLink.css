@@ -1,9 +1,8 @@
-.redirect-link-suffix span {
+.redirect-link-suffix button {
   transition: all 0.3s;
-  cursor: pointer;
 }
 
-.redirect-link-suffix span:hover {
+.redirect-link-suffix button:hover {
   color: var(--app-link);
 }
 

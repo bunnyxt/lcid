@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Input, Tooltip } from 'antd';
+import { Button, Input, Tooltip } from 'antd';
 import { RedoOutlined } from '@ant-design/icons';
 import './RedirectCard.css';
 import RedirectLink from './RedirectLink';
@@ -8,6 +8,7 @@ const RedirectCard = () => {
   const [problemId, setProblemId] = useState('146');
   const redirectIdInputRef = useRef(null);
 
+  // Intentionally limit discovery to the classic first 1,000 problems.
   const MAX_RANDOM_PROBLEM_ID = 1000;
   const setRandomProblemId = () => {
     setProblemId('' + Math.ceil(Math.random() * MAX_RANDOM_PROBLEM_ID));
@@ -41,7 +42,13 @@ const RedirectCard = () => {
         suffix={
           <div className="redirect-id-input-suffix">
             <Tooltip placement="top" title="get random problem id">
-              <RedoOutlined onClick={() => setRandomProblemId()} />
+              <Button
+                type="text"
+                size="small"
+                icon={<RedoOutlined />}
+                aria-label="Get random problem id"
+                onClick={setRandomProblemId}
+              />
             </Tooltip>
           </div>
         }

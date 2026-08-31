@@ -24,12 +24,11 @@
   padding: 2rem 6rem;
 }
 
-.redirect-id-input-suffix span {
+.redirect-id-input-suffix button {
   transition: all 0.3s;
-  cursor: pointer;
 }
 
-.redirect-id-input-suffix span:hover {
+.redirect-id-input-suffix button:hover {
   color: var(--app-link);
 }
 

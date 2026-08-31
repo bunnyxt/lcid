@@ -130,8 +130,8 @@ const ProblemsTable = () => {
       })
   }, []);
 
-  const compareStringArray = (arr1, arr2) => {
-    if (typeof(arr1) !== 'string' || typeof(arr2) !== 'string') {
+  const compareArrays = (arr1, arr2) => {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) {
       return false;
     }
     if (arr1.length !== arr2.length) {
@@ -148,10 +148,10 @@ const ProblemsTable = () => {
   };
 
   const handleChange = (_, filters) => {
-    if (!compareStringArray(filters.difficulty, filteredDifficulty)) {
+    if (!compareArrays(filters.difficulty, filteredDifficulty)) {
       setFilteredDifficulty(filters.difficulty === null ? [] : filters.difficulty);
     }
-    if (!compareStringArray(filters.topicTags, filteredTopics)) {
+    if (!compareArrays(filters.topicTags, filteredTopics)) {
       setFilteredTopics(filters.topicTags === null ? [] : filters.topicTags);
     }
   };
@@ -374,9 +374,9 @@ const ProblemsTable = () => {
                 title={
                   <div className="rate-tooltip">
                     <div>accepted:</div>
-                    <div className="tooltip-value">{totalSubmissionRaw.toLocaleString()}</div>
-                    <div>submitted:</div>
                     <div className="tooltip-value">{totalAcceptedRaw.toLocaleString()}</div>
+                    <div>submitted:</div>
+                    <div className="tooltip-value">{totalSubmissionRaw.toLocaleString()}</div>
                     <div>beats:</div>
                     <div className="tooltip-value">{Math.round(position * 100)}%</div>
                   </div>

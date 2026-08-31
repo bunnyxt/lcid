@@ -1,13 +1,26 @@
 import sys
-from flask import Flask, jsonify, redirect
+from flask import Flask, jsonify, redirect, request
 from flask_cors import CORS
 from flask_compress import Compress
 from waitress import serve
 import json
+import re
 
 app = Flask(__name__, static_url_path='', static_folder='build')
 Compress(app)
 CORS(app)
+
+HASHED_ASSET_RE = re.compile(r'^/assets/.+[-.][A-Za-z0-9_-]{8,}\.(?:css|js)$')
+
+
+@app.after_request
+def cache_hashed_assets(response):
+    if response.status_code == 200 and HASHED_ASSET_RE.match(request.path):
+        response.cache_control.no_cache = None
+        response.cache_control.public = True
+        response.cache_control.max_age = 31536000
+        response.cache_control.immutable = True
+    return response
 
 # load problems
 with open('problems_all.json', 'r') as f:
