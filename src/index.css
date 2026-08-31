@@ -36,6 +36,10 @@ html[data-theme='dark'] {
   --app-icon-hover: #ffffff;
 }
 
+html {
+  background-color: var(--app-bg);
+}
+
 body {
   margin: 0;
   background-color: var(--app-bg);

@@ -36,6 +36,10 @@ const ThemeSync = ({ dark }) => {
     const root = document.documentElement;
     root.dataset.theme = dark ? 'dark' : 'light';
     root.style.colorScheme = dark ? 'dark' : 'light';
+    // The bootstrap script in index.html sets an inline background-color to
+    // avoid a flash before CSS loads. Drop it now so the themed CSS variable
+    // (which tracks data-theme) takes over on every toggle.
+    root.style.removeProperty('background-color');
   }, [dark]);
   return null;
 };
