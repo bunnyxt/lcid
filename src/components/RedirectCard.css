@@ -1,5 +1,5 @@
 .color-l {
-  color: rgb(0, 0, 0);
+  color: var(--app-title-strong);
 }
 
 .color-c {
@@ -7,7 +7,7 @@
 }
 
 .color-id {
-  color: rgb(179, 179, 179);
+  color: var(--app-title-muted);
 }
 
 .redirect-card {
@@ -16,7 +16,8 @@
   padding: 4rem;
   border-radius: 1rem;
   text-align: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: var(--app-card-bg);
+  box-shadow: var(--app-card-shadow);
 }
 
 .redirect-id-input {
@@ -29,7 +30,7 @@
 }
 
 .redirect-id-input-suffix span:hover {
-  color: #1677ff;
+  color: var(--app-link);
 }
 
 .redirect-link-grid {

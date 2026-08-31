@@ -1,5 +1,5 @@
 code {
-  background-color: #f0f0f0;
+  background-color: var(--app-code-bg);
   padding: 0 4px;
   border-radius: 4px;
 }

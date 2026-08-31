@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
-import { Table, Tag, Tooltip, Input, Row, Col, Button, Popover } from 'antd';
+import { Table, Tag, Tooltip, Input, Row, Col, Button, Popover, theme } from 'antd';
 import ProblemsTableControl from './ProblemsTableControl';
 import ColorIndicator from './ColorIndicator';
 import './ProblemsTable.css';
 
 const ProblemsTable = () => {
+  const { token } = theme.useToken();
+
   const [loadingProblems, setLoadingProblems] = useState(false);
   const [problems, setProblems] = useState([]);
   const [topics, setTopics] = useState([]);
@@ -250,7 +252,7 @@ const ProblemsTable = () => {
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? '#1677ff' : undefined,
+                color: filtered ? token.colorPrimary : undefined,
               }}
             />
           )}
@@ -303,7 +305,7 @@ const ProblemsTable = () => {
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? '#1677ff' : undefined,
+                color: filtered ? token.colorPrimary : undefined,
               }}
             />
           )}
