@@ -8,7 +8,8 @@ const RedirectCard = () => {
   const [problemId, setProblemId] = useState('146');
   const redirectIdInputRef = useRef(null);
 
-  const MAX_RANDOM_PROBLEM_ID = 4000;
+  // Intentionally limit discovery to the classic first 1,000 problems.
+  const MAX_RANDOM_PROBLEM_ID = 1000;
   const setRandomProblemId = () => {
     setProblemId('' + Math.ceil(Math.random() * MAX_RANDOM_PROBLEM_ID));
   };
