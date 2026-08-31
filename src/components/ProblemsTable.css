@@ -64,11 +64,15 @@
 }
 
 .topics-container {
-  margin-bottom: -4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 
 .topic-tag {
-  margin-bottom: 4px;
+  /* antd v6 Tag no longer ships a default trailing margin; the container gap
+     handles spacing instead. */
+  margin: 0;
   cursor: pointer;
 }
 

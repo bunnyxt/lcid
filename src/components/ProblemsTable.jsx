@@ -326,7 +326,7 @@ const ProblemsTable = () => {
         <Table.Column 
           title="Like Rate" 
           key="likeRate" 
-          width={108}
+          width={120}
           sorter={(a, b) => b.likeRate - a.likeRate}
           render={(problem) => {
             const { likes, dislikes, likeRate } = problem;
@@ -356,7 +356,7 @@ const ProblemsTable = () => {
         <Table.Column 
           title="AC Rate" 
           key="acRate" 
-          width={108}
+          width={120}
           sorter={(a, b) => b.acRate - a.acRate}
           render={(problem) => {
             const { acRate, totalSubmissionRaw, totalAcceptedRaw } = problem;
@@ -386,7 +386,7 @@ const ProblemsTable = () => {
         <Table.Column 
           title="Difficulty" 
           key="difficulty" 
-          width={108}
+          width={120}
           filters={[
             { text: 'Easy', value: 'Easy'}, 
             { text: 'Medium', value: 'Medium'}, 
