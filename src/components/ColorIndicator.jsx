@@ -1,8 +1,10 @@
 import React from 'react';
+import { theme } from 'antd';
 
 const ColorIndicator = ({
   position,
 }) => {
+  const { token } = theme.useToken();
   const height = 2;
   const lineX = `${position * 100}%`;
   return (
@@ -15,7 +17,7 @@ const ColorIndicator = ({
         y1="0"
         x2={lineX}
         y2={height}
-        stroke="#000000d9"
+        stroke={token.colorText}
         strokeWidth="2"
       />
     </svg>

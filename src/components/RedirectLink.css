@@ -4,7 +4,7 @@
 }
 
 .redirect-link-suffix span:hover {
-  color: #1677ff;
+  color: var(--app-link);
 }
 
 .premium-tag {

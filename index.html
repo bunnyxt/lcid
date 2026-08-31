@@ -10,6 +10,23 @@
     <link rel="apple-touch-icon" href="/lcid_logo_192.png" />
     <link rel="manifest" href="/manifest.json" />
     <title>LCid - access LeetCode problems via id</title>
+    <script>
+      // Set the theme before first paint to avoid a flash of the wrong mode.
+      (function () {
+        try {
+          var saved = localStorage.getItem('lcid-theme');
+          var dark = saved
+            ? saved === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var root = document.documentElement;
+          root.dataset.theme = dark ? 'dark' : 'light';
+          root.style.colorScheme = dark ? 'dark' : 'light';
+          root.style.backgroundColor = dark ? '#141414' : '#ffffff';
+        } catch (e) {
+          /* localStorage/matchMedia unavailable: fall back to light */
+        }
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

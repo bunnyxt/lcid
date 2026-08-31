@@ -77,7 +77,7 @@
 }
 
 .topics-hidden {
-  color: #bfbfbf;
+  color: var(--app-topics-hidden);
 }
 
 .popularity-tooltip {

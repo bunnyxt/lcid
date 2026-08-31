@@ -1,5 +1,44 @@
+/*
+ * Theme tokens for the app's own (non-antd) styling. antd components follow
+ * ConfigProvider's algorithm; these cover the hand-written colors that don't.
+ * The `data-theme` attribute is set on <html> before first paint (see
+ * index.html) and kept in sync by ThemeProvider.
+ */
+:root {
+  --app-bg: #ffffff;
+  --app-title-strong: #000000;
+  --app-title-muted: rgb(179, 179, 179);
+  --app-code-bg: #f0f0f0;
+  --app-card-bg: transparent;
+  --app-card-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  --app-topics-hidden: #bfbfbf;
+  --app-link: #1677ff;
+  --app-border: rgba(0, 0, 0, 0.15);
+  --app-toggle-bg: #ffffff;
+  --app-icon: #8c8c8c;
+  --app-icon-hover: #000000;
+}
+
+html[data-theme='dark'] {
+  --app-bg: #141414;
+  --app-title-strong: #ffffff;
+  --app-title-muted: #8c8c8c;
+  --app-code-bg: #2a2a2a;
+  --app-card-bg: #1f1f1f;
+  --app-card-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45),
+    0 6px 20px 0 rgba(0, 0, 0, 0.4);
+  --app-topics-hidden: #595959;
+  --app-link: #3c89e8;
+  --app-border: rgba(255, 255, 255, 0.2);
+  --app-toggle-bg: #1f1f1f;
+  --app-icon: #8c8c8c;
+  --app-icon-hover: #ffffff;
+}
+
 body {
   margin: 0;
+  background-color: var(--app-bg);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

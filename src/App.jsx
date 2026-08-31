@@ -2,12 +2,14 @@ import React, { lazy, Suspense } from 'react';
 import { App as AntApp, Spin } from 'antd';
 import './App.css';
 import RedirectCard from './components/RedirectCard';
+import ThemeToggle from './theme/ThemeToggle';
 
 const ProblemsTable = lazy(() => import('./components/ProblemsTable'));
 
 const App = () => {
   return (
     <AntApp>
+      <ThemeToggle />
       <div className="App">
         <div className="redirect-wrapper">
           <RedirectCard />
