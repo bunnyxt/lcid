@@ -9,3 +9,6 @@ build/
 venv/
 .venv/
 .env.local
+
+# Claude Code local settings
+.claude/

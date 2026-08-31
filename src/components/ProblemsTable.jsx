@@ -245,7 +245,7 @@ const ProblemsTable = () => {
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? '#1890ff' : undefined,
+                color: filtered ? '#1677ff' : undefined,
               }}
             />
           )}
@@ -298,7 +298,7 @@ const ProblemsTable = () => {
           filterIcon={(filtered) => (
             <SearchOutlined
               style={{
-                color: filtered ? '#1890ff' : undefined,
+                color: filtered ? '#1677ff' : undefined,
               }}
             />
           )}
