@@ -1,6 +1,6 @@
 import unittest
 
-from app import app, problems_all
+from app import app, cache_hashed_assets, problems_all
 
 
 class AppRoutesTestCase(unittest.TestCase):
@@ -45,6 +45,21 @@ class AppRoutesTestCase(unittest.TestCase):
         response = self.client.get('/cn/999999')
 
         self.assertEqual(response.status_code, 404)
+
+    def test_hashed_assets_use_immutable_cache(self):
+        with app.test_request_context('/assets/index-ABCDEFGH.js'):
+            response = cache_hashed_assets(app.response_class(status=200))
+
+        self.assertIn('public', response.headers['Cache-Control'])
+        self.assertIn('max-age=31536000', response.headers['Cache-Control'])
+        self.assertIn('immutable', response.headers['Cache-Control'])
+        self.assertNotIn('no-cache', response.headers['Cache-Control'])
+
+    def test_index_is_not_immutable(self):
+        with app.test_request_context('/'):
+            response = cache_hashed_assets(app.response_class(status=200))
+
+        self.assertNotIn('immutable', response.headers.get('Cache-Control', ''))
 
 
 if __name__ == '__main__':

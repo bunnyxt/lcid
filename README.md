@@ -25,7 +25,7 @@ To start LCid on your local machine, you should have `python 3.7+` installed.
 
 The crawler is implemented with `urllib3` and backend is powered with `flask`.
 
-To install all those dependencies, execute `pip install -r requirements`.
+To install all those dependencies, execute `pip install -r requirements.txt`.
 
 The frontend is built with `React.js` with `Ant Design` UI.
 
