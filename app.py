@@ -1,10 +1,12 @@
 import sys
 from flask import Flask, jsonify, redirect
 from flask_cors import CORS
+from flask_compress import Compress
 from waitress import serve
 import json
 
 app = Flask(__name__, static_url_path='', static_folder='build')
+Compress(app)
 CORS(app)
 
 # load problems
