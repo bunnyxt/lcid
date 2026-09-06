@@ -1,5 +1,5 @@
-urllib3~=2.2
-certifi>=2024.8.30
+urllib3~=1.25.3
+certifi
 Flask~=2.3.3
 flask-cors~=4.0.0
 Flask-Compress~=1.24.0
