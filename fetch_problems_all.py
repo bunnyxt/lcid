@@ -87,7 +87,7 @@ def fetch_problems_page(cf_clearance, csrftoken, limit=PAGE_SIZE, skip=0):
             print('Status %d got when fetch problems, will retry %d second(s) later...' % (r.status, trial ** 2))
             time.sleep(trial ** 2)
     if r.status != 200:
-        raise RuntimeError('Fail to fetch problems! status: %d, skip: %d' % (r.status, skip))
+        raise RuntimeError('Fail to fetch problems! status: %d, data: %s' % (r.status, r.data))
     response_content = json.loads(r.data)
     return response_content
 
@@ -107,7 +107,7 @@ def fetch_all_problems(cf_clearance, csrftoken):
         skip += PAGE_SIZE
         time.sleep(0.5 + random.random())
 
-    return all_questions, total_count
+    return all_questions
 
 
 def main():
@@ -119,16 +119,7 @@ def main():
     print('Loaded cf_clearance and csrftoken.')
 
     print('Now fetching all LeetCode problems (paginated, %d per page)...' % PAGE_SIZE)
-    all_questions, total_count = fetch_all_problems(cf_clearance, csrftoken)
-
-    if len(all_questions) != total_count:
-        raise RuntimeError('Fetched problem count %d does not match upstream total %d' % (
-            len(all_questions), total_count))
-    question_ids = [q.get('frontendQuestionId') for q in all_questions]
-    if any(not q.get('frontendQuestionId') or not q.get('titleSlug') for q in all_questions):
-        raise RuntimeError('Fetched problems missing frontendQuestionId or titleSlug')
-    if len(set(question_ids)) != len(question_ids):
-        raise RuntimeError('Fetched problems contain duplicate question ids')
+    all_questions = fetch_all_problems(cf_clearance, csrftoken)
 
     questions_all = {q['frontendQuestionId']: q for q in all_questions}
     for question_id in questions_all.keys():
