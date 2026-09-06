@@ -116,7 +116,7 @@ def main():
     csrftoken = config.get("LC_CSRFTOKEN", None)
     if not cf_clearance or not csrftoken:
         raise RuntimeError('Fail to load cf_clearance and csrftoken from environ!')
-    print('Got cf_clearance %s and csrftoken %s.' % (cf_clearance, csrftoken))
+    print('Loaded cf_clearance and csrftoken.')
 
     print('Now fetching all LeetCode problems (paginated, %d per page)...' % PAGE_SIZE)
     all_questions = fetch_all_problems(cf_clearance, csrftoken)
