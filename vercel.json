@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "outputDirectory": "build",
+  "rewrites": [
+    { "source": "/info", "destination": "/info.json" },
+    { "source": "/info/:problem_id", "destination": "/api/problem?problem_id=:problem_id&mode=info" },
+    { "source": "/cn/:problem_id", "destination": "/api/problem?problem_id=:problem_id&mode=cn" },
+    { "source": "/:problem_id", "destination": "/api/problem?problem_id=:problem_id" }
+  ]
+}

@@ -9,7 +9,7 @@ This simple project, called LCid, provides directly access to LeetCode problems 
 - Fetch all LeetCode problems via crawler.
 - Redirect to LeetCode problem page with problem id in the URL path via backend.
 - Support both LeetCode [global site](https://leetcode.com/problemset/all/) and [China site](https://leetcode.cn/problemset/all/) redirect.
-- CI/CD, fetch all LeetCode problems daily and commit back to repository via GitHub Actions, then trigger backend rebuild and redeploy with the latest problems via Heroku.
+- CI/CD, fetch all LeetCode problems daily and commit back to the repository via GitHub Actions, then deploy the latest snapshot.
 
 ![redirect-demo](redirect-demo.gif)
 
@@ -84,13 +84,11 @@ Now you can try the following endpoints. All of them should work correctly.
 
 ## Deployment
 
-To deploy the system for public access, of course, you can use any platform you like. Here, I use GitHub Actions and Heroku.
+GitHub Actions fetches LeetCode problems daily and commits `problems_all.json` to `main` ([workflow](.github/workflows/main.yml)). Its LeetCode cookies belong in GitHub Actions secrets, not in Vercel. Each deployment builds the Vite frontend and copies that committed snapshot to `build/info.json`. On Vercel, `/info` rewrites to this static JSON file; the small function in `api/problem.js` handles individual info and redirects.
 
-- GitHub Actions is used to fetch all LeetCode problems daily (execute `python fetch_problems_all.py`, get the latest `problems_all.json`) and commit back to repository. You would know how it works by analyzing [this config file](.github/workflows/main.yml).
-  - Don't forget to set required sensitive environment variables in GitHub Secrets (`settings/secrets/actions`).
-- Heroku would rebuild and redeploy the backend service once [main branch of this repository](https://github.com/bunnyxt/lcid) changed. This can be configured at `Deploy - Automatic deploys` in your Heroku app dashboard.
-  - Configure the Heroku Node.js buildpack before the Python buildpack. Node.js 22 and npm 10 run `heroku-postbuild`, which creates the Vite bundle in `build/`; the Python process in `Procfile` then serves that directory with Flask and Waitress.
-- Heroku also support add additional domains to visit app. [Here](https://devcenter.heroku.com/articles/custom-domains) is the official guide.
+For Vercel, import this repository as a Vite project with `main` as the production branch. The checked-in [vercel.json](vercel.json) selects `build/` as the output directory and preserves the existing `/info`, `/info/<id>`, `/cn/<id>`, and `/<id>` URLs. Keep `VITE_BACKEND_API_URL` empty in production so the frontend fetches `/info` from the same origin. Verify that commits from the daily workflow trigger deployments before switching the custom domain.
+
+Add both `lcid.cc` and `www.lcid.cc` to the Vercel project. Check Vercel's requested DNS targets and certificate status before changing the current Cloudflare records. Keep the Heroku app available until both HTTPS hostnames and the representative routes have been checked on Vercel. The existing `Procfile`, Python backend, and Heroku buildpacks remain available during migration and rollback.
 
 ## Disclaimer
 

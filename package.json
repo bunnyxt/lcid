@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-problems.mjs",
     "heroku-postbuild": "npm run build",
     "preview": "vite preview"
   },
