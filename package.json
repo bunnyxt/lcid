@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.2",
+    "@vercel/functions": "^3.9.11",
     "antd": "^6.6.2",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

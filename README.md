@@ -92,6 +92,14 @@ The checked-in [vercel.json](vercel.json) selects `build/` as the output directo
 
 To verify a deployment, check the latest deployment in the [Vercel project](https://vercel.com/bunnyxts-projects/lcid), then test `/`, `/info`, `/info/1`, `/1`, and `/cn/1` over HTTPS on both hostnames. The Heroku app is retained with its web dyno scaled to zero and automatic deployment disabled. For a rollback, deploy the desired commit to Heroku, scale its web dyno back up, and restore the former Heroku DNS targets for both hostnames in Cloudflare. Recheck HTTPS and the routes after DNS propagates.
 
+### Redirect analytics
+
+The Vercel production function records one PostHog `redirect_attempt` event for each GET or HEAD request to `/<id>` or `/cn/<id>`. An event contains its UTC timestamp, `problem_id`, `target_site` (`leetcode.com` or `leetcode.cn`), `status_code`, and `success` (`true` for a 302 redirect, `false` for an unknown ID's 404). A 302 means LCid issued the redirect; it cannot establish whether LeetCode subsequently loaded in the visitor's browser. `/info`, `/info/<id>`, the homepage, and OPTIONS requests are excluded. PostHog's project setting discards client IP addresses, and LCid sends no visitor identifier or IP address.
+
+Set `POSTHOG_PROJECT_TOKEN` as a Vercel production environment variable to enable capture. The function sends the event in the background so analytics failures do not block the redirect; delivery errors appear in Vercel function logs. Function failures that occur before the handler runs are visible only in Vercel logs and are not counted as PostHog events.
+
+View redirect counts and the breakdown by `problem_id`, `target_site`, or `success` in the [LCid PostHog project](https://us.posthog.com/project/658935). A daily S3-compatible batch export writes gzip-compressed JSON Lines to the private Cloudflare R2 bucket `lcid-redirect-events` under `redirect-events/`. Download raw files from the [R2 bucket](https://dash.cloudflare.com/b6e8a9a259366668bfc54143858f54ce/r2/default/buckets/lcid-redirect-events). Keep the bucket private and the R2 access key out of this repository.
+
 ## Disclaimer
 
 - This is just a naive tool for convenient access and only call LeetCode API at low frequency. It only obtains public accessible data (no personal info or paid content collected and distributed). DO NOT ABUSE LEETCODE API!!!
