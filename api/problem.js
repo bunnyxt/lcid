@@ -1,6 +1,16 @@
 const problems = require('../problems_all.json');
 
 module.exports = function handler(request, response) {
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+  response.setHeader('Access-Control-Allow-Headers', '*');
+
+  if (request.method === 'OPTIONS') {
+    response.statusCode = 200;
+    response.end();
+    return;
+  }
+
   const { problem_id: problemId, mode } = request.query;
   const problem = typeof problemId === 'string' && Object.hasOwn(problems, problemId)
     ? problems[problemId]
