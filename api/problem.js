@@ -1,4 +1,5 @@
 const problems = require('../problems_all.json');
+const { recordRedirectAttempt } = require('../lib/redirect-analytics');
 
 module.exports = function handler(request, response) {
   response.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,6 +33,7 @@ module.exports = function handler(request, response) {
 
   if (!problem) {
     response.statusCode = 404;
+    recordRedirectAttempt(request, problemId, mode === 'cn' ? 'leetcode.cn' : 'leetcode.com', 404);
     response.end(`Fail to redirect to leetcode problem ${problemId} page.`);
     return;
   }
@@ -39,5 +41,6 @@ module.exports = function handler(request, response) {
   const site = mode === 'cn' ? 'leetcode.cn' : 'leetcode.com';
   response.statusCode = 302;
   response.setHeader('Location', `https://${site}/problems/${problem.titleSlug}/`);
+  recordRedirectAttempt(request, problemId, site, 302);
   response.end();
 };
