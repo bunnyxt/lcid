@@ -29,7 +29,7 @@ To install all those dependencies, execute `pip install -r requirements.txt`.
 
 The frontend is built with `React.js` with `Ant Design` UI.
 
-To build frontend, use `Node.js 22.x` with `npm 10.x`, matching the versions used by Heroku.
+To build frontend, use `Node.js 22.x` with `npm 10.x`.
 
 (older versions may work but not tested)
 
@@ -84,11 +84,13 @@ Now you can try the following endpoints. All of them should work correctly.
 
 ## Deployment
 
-GitHub Actions fetches LeetCode problems daily and commits `problems_all.json` to `main` ([workflow](.github/workflows/main.yml)). Its LeetCode cookies belong in GitHub Actions secrets, not in Vercel. Each deployment builds the Vite frontend and copies that committed snapshot to `build/info.json`. On Vercel, `/info` rewrites to this static JSON file; the small function in `api/problem.js` handles individual info and redirects.
+The production project runs on Vercel at [lcid.cc](https://lcid.cc) and [www.lcid.cc](https://www.lcid.cc). Cloudflare provides DNS; both hostnames point directly to Vercel with its proxy disabled. Vercel manages the HTTPS certificate and renews it automatically.
 
-For Vercel, import this repository as a Vite project with `main` as the production branch. The checked-in [vercel.json](vercel.json) selects `build/` as the output directory and preserves the existing `/info`, `/info/<id>`, `/cn/<id>`, and `/<id>` URLs. Keep `VITE_BACKEND_API_URL` empty in production so the frontend fetches `/info` from the same origin. Verify that commits from the daily workflow trigger deployments before switching the custom domain.
+GitHub Actions fetches LeetCode problems daily and commits `problems_all.json` to `main` ([workflow](.github/workflows/main.yml)). Its LeetCode cookies belong in GitHub Actions secrets, not in Vercel. Commits to `main`, including commits made by the workflow, trigger a Vercel deployment. Each deployment builds the Vite frontend and copies that committed snapshot to `build/info.json`. On Vercel, `/info` rewrites to this static JSON file; the small function in `api/problem.js` handles individual info and redirects. Thus `/info` changes when a deployment publishes a new snapshot.
 
-Add both `lcid.cc` and `www.lcid.cc` to the Vercel project. Check Vercel's requested DNS targets and certificate status before changing the current Cloudflare records. Keep the Heroku app available until both HTTPS hostnames and the representative routes have been checked on Vercel. The existing `Procfile`, Python backend, and Heroku buildpacks remain available during migration and rollback.
+The checked-in [vercel.json](vercel.json) selects `build/` as the output directory and preserves the existing `/info`, `/info/<id>`, `/cn/<id>`, and `/<id>` URLs. Keep `VITE_BACKEND_API_URL` empty in production so the frontend fetches `/info` from the same origin.
+
+To verify a deployment, check the latest deployment in the [Vercel project](https://vercel.com/bunnyxts-projects/lcid), then test `/`, `/info`, `/info/1`, `/1`, and `/cn/1` over HTTPS on both hostnames. The Heroku app is retained with its web dyno scaled to zero and automatic deployment disabled. For a rollback, deploy the desired commit to Heroku, scale its web dyno back up, and restore the former Heroku DNS targets for both hostnames in Cloudflare. Recheck HTTPS and the routes after DNS propagates.
 
 ## Disclaimer
 
