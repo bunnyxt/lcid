@@ -21,7 +21,7 @@ What's more, to redirect to China site, add `/cn/<problem-id>` instead (e.g. [lc
 
 ## Environment
 
-To start LCid on your local machine, you should have `python 3.7+` installed.
+Use Python 3.11 for the crawler and local backend, matching the GitHub Actions workflow.
 
 The crawler is implemented with `urllib3` and backend is powered with `flask`.
 
@@ -51,19 +51,7 @@ LC_CSRFTOKEN="{manually get from browser}"
 
 ### Fetch All Problems
 
-To fetch all problems, execute `python fetch_problems_all.py`. Then, you will see the logs below.
-
-```zsh
-Now load cf_clearance and csrftoken...
-Loaded cf_clearance and csrftoken.
-Now try get LeetCode problems total count...
-Found 3333 problems in total.
-Now try fetch all 3333 LeetCode problems...
-All 3333 problems fetched.
-All 3333 problems info saved into problems_all.json file.
-```
-
-After few seconds, all problems info have been saved into `problems_all.json` file in json format.
+To fetch all problems, execute `python fetch_problems_all.py`. The crawler fetches problems in pages, reports progress, and saves the results to `problems_all.json` in JSON format.
 
 ### Build Frontend
 
@@ -84,21 +72,15 @@ Now you can try the following endpoints. All of them should work correctly.
 
 ## Deployment
 
-The production project runs on Vercel at [lcid.cc](https://lcid.cc) and [www.lcid.cc](https://www.lcid.cc). Cloudflare provides DNS; both hostnames point directly to Vercel with its proxy disabled. Vercel manages the HTTPS certificate and renews it automatically.
+To deploy on Vercel, use the checked-in [vercel.json](vercel.json). The build command `npm run build` creates the frontend in `build/` and copies `problems_all.json` to `build/info.json`. The configuration serves `/info` from that static snapshot and routes `/info/<id>`, `/cn/<id>`, and `/<id>` to [api/problem.js](api/problem.js).
 
-GitHub Actions fetches LeetCode problems daily and commits `problems_all.json` to `main` ([workflow](.github/workflows/main.yml)). Its LeetCode cookies belong in GitHub Actions secrets, not in Vercel. Commits to `main`, including commits made by the workflow, trigger a Vercel deployment. Each deployment builds the Vite frontend and copies that committed snapshot to `build/info.json`. On Vercel, `/info` rewrites to this static JSON file; the small function in `api/problem.js` handles individual info and redirects. Thus `/info` changes when a deployment publishes a new snapshot.
+Keep `VITE_BACKEND_API_URL` empty when building for production so the frontend fetches `/info` from the same origin.
 
-The checked-in [vercel.json](vercel.json) selects `build/` as the output directory and preserves the existing `/info`, `/info/<id>`, `/cn/<id>`, and `/<id>` URLs. Keep `VITE_BACKEND_API_URL` empty in production so the frontend fetches `/info` from the same origin.
-
-To verify a deployment, check the latest deployment in the [Vercel project](https://vercel.com/bunnyxts-projects/lcid), then test `/`, `/info`, `/info/1`, `/1`, and `/cn/1` over HTTPS on both hostnames. The Heroku app is retained with its web dyno scaled to zero and automatic deployment disabled. For a rollback, deploy the desired commit to Heroku, scale its web dyno back up, and restore the former Heroku DNS targets for both hostnames in Cloudflare. Recheck HTTPS and the routes after DNS propagates.
+The daily [GitHub Actions workflow](.github/workflows/main.yml) updates `problems_all.json` on `main` when the fetched data changes. To enable it, configure `LC_CF_CLEARANCE` and `LC_CSRFTOKEN` as repository secrets. Deploy the updated snapshot to refresh `/info`.
 
 ### Redirect analytics
 
-The Vercel production function records one PostHog `redirect_attempt` event for each GET or HEAD request to `/<id>` or `/cn/<id>`. An event contains its UTC timestamp, `problem_id`, `target_site` (`leetcode.com` or `leetcode.cn`), `status_code`, and `success` (`true` for a 302 redirect, `false` for an unknown ID's 404). A 302 means LCid issued the redirect; it cannot establish whether LeetCode subsequently loaded in the visitor's browser. `/info`, `/info/<id>`, the homepage, and OPTIONS requests are excluded. PostHog's project setting discards client IP addresses; LCid does not send visitor IPs and disables GeoIP enrichment from the Vercel server's location.
-
-Set `POSTHOG_PROJECT_TOKEN` as a Vercel production environment variable to enable capture. The function sends the event in the background so analytics failures do not block the redirect; delivery errors appear in Vercel function logs. Function failures that occur before the handler runs are visible only in Vercel logs and are not counted as PostHog events.
-
-View redirect counts and the breakdown by `problem_id`, `target_site`, or `success` in the [LCid PostHog project](https://us.posthog.com/project/658935). A daily S3-compatible batch export writes gzip-compressed JSON Lines to the private Cloudflare R2 bucket `lcid-redirect-events` under `redirect-events/{year}/{month}/{day}/`. Download raw files from the [R2 bucket](https://dash.cloudflare.com/b6e8a9a259366668bfc54143858f54ce/r2/default/buckets/lcid-redirect-events). Keep the bucket private and the R2 access key out of this repository.
+`POSTHOG_PROJECT_TOKEN` enables optional redirect usage statistics through PostHog in Vercel production deployments. Leave it unset to disable analytics.
 
 ## Disclaimer
 
